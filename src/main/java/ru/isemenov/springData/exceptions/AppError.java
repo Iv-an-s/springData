@@ -1,6 +1,6 @@
 package ru.isemenov.springData.exceptions;
 
-public class AppError{
+public class AppError {
     private int statusCode;
     private String message;
 

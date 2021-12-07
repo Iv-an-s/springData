@@ -10,26 +10,25 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
-    public List<Product> findAll(){
+    public List<Product> findAll() {
         return productRepository.findAll();
     }
 
-    public Optional<Product> findById(Long id){
+    public Optional<Product> findById(Long id) {
         return productRepository.findById(id);
     }
 
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         if (productRepository.existsById(id)) {
             productRepository.deleteById(id);
-        }else{
+        } else {
             throw new ResourceNotFoundException("Product is not found: " + id);
         }
-
     }
 }
