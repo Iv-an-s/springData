@@ -1,0 +1,22 @@
+create table if not exists products (id bigserial primary key, name varchar(255), cost int);
+insert into products (name, cost) values
+('bread', 10),
+('milk', 20),
+('cheese', 30),
+('apple', 40),
+('fish', 50),
+('meat', 60),
+('butter', 70),
+('onion', 80),
+('garlic', 90),
+('potato', 100),
+('tomato', 110),
+('cucumber', 120),
+('honey', 130),
+('sugar', 140),
+('salt', 150),
+('oil', 160),
+('pepper', 170),
+('orange', 180),
+('banana', 190),
+('plum', 200);
