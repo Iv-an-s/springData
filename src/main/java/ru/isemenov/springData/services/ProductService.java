@@ -31,4 +31,16 @@ public class ProductService {
             throw new ResourceNotFoundException("Product is not found: " + id);
         }
     }
+
+    public List<Product> findAllByPriceBetween(Integer min, Integer max) {
+        return productRepository.findAllByPriceBetween(min, max);
+    }
+
+    public List<Product> findProductsWithPriceMoreThanMin(Integer min) {
+        return productRepository.findProductsWithPriceMoreThanMin(min);
+    }
+
+    public List<Product> findProductsWithPriceLessThanMax(Integer max) {
+        return productRepository.findProductsWithPriceLessThanMax(max);
+    }
 }

@@ -2,6 +2,7 @@ package ru.isemenov.springData.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.isemenov.springData.entities.Product;
 import ru.isemenov.springData.exceptions.ResourceNotFoundException;
@@ -39,5 +40,20 @@ public class ProductController {
     @GetMapping("/products/delete/{id}")
     public void deleteById(@PathVariable Long id) {
         productService.deleteById(id);
+    }
+
+    @GetMapping("/products/price_between")
+    public List<Product> findProductsByPriceBetween(@RequestParam(defaultValue = "0") Integer min, @RequestParam(defaultValue = "0") Integer max) {
+        return productService.findAllByPriceBetween(min, max);
+    }
+
+    @GetMapping("/products/price_more/{min_price}")
+    public List<Product> findProductsWithPriceMoreThanMin(@PathVariable(name = "min_price") Integer min) {
+        return productService.findProductsWithPriceMoreThanMin(min);
+    }
+
+    @GetMapping("/products/price_less/{max_price}")
+    public List<Product> findProductsWithPriceLessThanMax(@PathVariable(name = "max_price") Integer max) {
+        return productService.findProductsWithPriceLessThanMax(max);
     }
 }
