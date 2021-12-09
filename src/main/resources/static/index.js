@@ -30,19 +30,30 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             });
     }
 
-    $scope.minMaxFilter = function (min, max) {
+    $scope.minMaxFilter = function () {
+        console.log($scope.sortedList);
             $http({
                 url: contextPath + '/products/price_between',
-                method: 'get',
+                method: 'GET',
                 params: {
-                    min: min,
-                    max: max
+                    min: $scope.sortedList.min,
+                    max: $scope.sortedList.max
                 }
             }).then(function (response) {
-                $scope.loadProducts;
+                $scope.ProductList = response.data;
+                $scope.sortedList.min = 0;
+                $scope.sortedList.max = 1000000;
             });
         }
 
+    $scope.createProductJson = function (){
+        console.log($scope.newProductJson);
+        $http.post(contextPath + '/products', $scope.newProductJson)
+            .then(function (response){
+                $scope.loadProducts();
+                $scope.newProductJson = null;
+            })
+    }
 
     $scope.loadProducts();
 });

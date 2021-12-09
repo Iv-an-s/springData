@@ -1,9 +1,6 @@
 package ru.isemenov.springData.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.isemenov.springData.entities.Product;
 import ru.isemenov.springData.exceptions.ResourceNotFoundException;
 import ru.isemenov.springData.services.ProductService;
@@ -35,6 +32,12 @@ public class ProductController {
     @GetMapping("/products")
     public List<Product> getAllProducts() {
         return productService.findAll();
+    }
+
+    @PostMapping("/products")
+    public Product saveNewProduct(@RequestBody Product product) {
+        //не имеем права в теле запроса передавать сущности. В этом примере - для упрощения
+        return productService.save(product);
     }
 
     @GetMapping("/products/delete/{id}")

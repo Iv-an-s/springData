@@ -50,4 +50,8 @@ public class ProductService {
         Product product = productRepository.findById(productID).orElseThrow(() -> new ResourceNotFoundException("Unable to change product's price. Product not found, id: " + productID));
         product.setPrice(product.getPrice() + delta);
     }
+
+    public Product save(Product product) {
+        return productRepository.save(product);
+    }
 }
