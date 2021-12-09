@@ -42,6 +42,11 @@ public class ProductController {
         productService.deleteById(id);
     }
 
+    @GetMapping("/products/change_price")
+    public void changePrice(@RequestParam Long productId, @RequestParam Integer delta) {
+        productService.changePrice(productId, delta);
+    }
+
     @GetMapping("/products/price_between")
     public List<Product> findProductsByPriceBetween(@RequestParam(defaultValue = "0") Integer min, @RequestParam(defaultValue = "0") Integer max) {
         return productService.findAllByPriceBetween(min, max);

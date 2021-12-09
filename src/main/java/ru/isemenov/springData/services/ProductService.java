@@ -5,6 +5,7 @@ import ru.isemenov.springData.entities.Product;
 import ru.isemenov.springData.exceptions.ResourceNotFoundException;
 import ru.isemenov.springData.repositories.ProductRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,5 +43,11 @@ public class ProductService {
 
     public List<Product> findProductsWithPriceLessThanMax(Integer max) {
         return productRepository.findProductsWithPriceLessThanMax(max);
+    }
+
+    @Transactional
+    public void changePrice(Long productID, Integer delta) {
+        Product product = productRepository.findById(productID).orElseThrow(() -> new ResourceNotFoundException("Unable to change product's price. Product not found, id: " + productID));
+        product.setPrice(product.getPrice() + delta);
     }
 }
