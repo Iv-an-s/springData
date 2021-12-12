@@ -21,19 +21,19 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Page<Product> find(Integer minPrice, Integer maxPrice, String namePart, Integer page){
-        Specification <Product> spec = Specification.where(null);
-        if(minPrice != null){
+    public Page<Product> find(Integer minPrice, Integer maxPrice, String namePart, Integer page) {
+        Specification<Product> spec = Specification.where(null);
+        if (minPrice != null) {
             spec = spec.and(ProductSpecifications.priceGreaterOrEqualsThan(minPrice));
         }
-        if (maxPrice != null){
+        if (maxPrice != null) {
             spec = spec.and(ProductSpecifications.priceLessOrEqualsThan(maxPrice));
         }
-        if (namePart != null){
+        if (namePart != null) {
             spec = spec.and(ProductSpecifications.nameLike(namePart));
         }
 
-        return productRepository.findAll(spec, PageRequest.of(page -1, 5));
+        return productRepository.findAll(spec, PageRequest.of(page - 1, 5));
     }
 
     public List<Product> findAll() {

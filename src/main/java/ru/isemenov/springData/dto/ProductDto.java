@@ -2,8 +2,6 @@ package ru.isemenov.springData.dto;
 
 import ru.isemenov.springData.entities.Product;
 
-import javax.persistence.Column;
-
 public class ProductDto {
     private Long id;
     private String name;

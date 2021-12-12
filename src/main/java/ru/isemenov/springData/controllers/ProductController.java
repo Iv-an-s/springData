@@ -7,8 +7,6 @@ import ru.isemenov.springData.entities.Product;
 import ru.isemenov.springData.exceptions.ResourceNotFoundException;
 import ru.isemenov.springData.services.ProductService;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("api/v1/products")
 public class ProductController {
@@ -20,12 +18,12 @@ public class ProductController {
 
     @GetMapping
     public Page<ProductDto> getAllProducts(
-        @RequestParam(name = "p", defaultValue = "1") Integer page,
-        @RequestParam(name = "min_price", required = false) Integer minPrice,
-        @RequestParam(name = "max_price", required = false) Integer maxPrice,
-        @RequestParam(name = "name_part", required = false) String namePart
+            @RequestParam(name = "p", defaultValue = "1") Integer page,
+            @RequestParam(name = "min_price", required = false) Integer minPrice,
+            @RequestParam(name = "max_price", required = false) Integer maxPrice,
+            @RequestParam(name = "name_part", required = false) String namePart
     ) {
-        if (page < 1){
+        if (page < 1) {
             page = 1;
         }
         return productService.find(minPrice, maxPrice, namePart, page).map(p -> new ProductDto(p));
@@ -46,7 +44,6 @@ public class ProductController {
 //        return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(), "Product not found, id: " + id), HttpStatus.NOT_FOUND);
 //    }
 
-
     @PostMapping
     public ProductDto saveNewProduct(@RequestBody ProductDto productDto) {
         Product product = new Product(productDto);
@@ -55,7 +52,7 @@ public class ProductController {
     }
 
     @PutMapping
-    public ProductDto updateProduct(@RequestBody ProductDto productDto){
+    public ProductDto updateProduct(@RequestBody ProductDto productDto) {
         Product product = new Product(productDto);
         return new ProductDto(productService.save(product));
     }

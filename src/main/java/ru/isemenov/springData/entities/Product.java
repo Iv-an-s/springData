@@ -45,7 +45,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(ProductDto productDto){
+    public Product(ProductDto productDto) {
         this.id = productDto.getId();
         this.name = productDto.getName();
         this.price = productDto.getPrice();
