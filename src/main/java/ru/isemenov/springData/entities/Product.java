@@ -13,8 +13,8 @@ public class Product {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "cost")
-    private int cost;
+    @Column(name = "price")
+    private int price;
 
     public Long getId() {
         return id;
@@ -32,12 +32,12 @@ public class Product {
         this.name = name;
     }
 
-    public int getCost() {
-        return cost;
+    public int getPrice() {
+        return price;
     }
 
-    public void setCost(int cost) {
-        this.cost = cost;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public Product() {
