@@ -1,5 +1,6 @@
 package ru.isemenov.springData.controllers;
 
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.isemenov.springData.entities.Product;
 import ru.isemenov.springData.exceptions.ResourceNotFoundException;
@@ -15,6 +16,20 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @GetMapping("/products")
+    public Page<Product> getAllProducts(
+        @RequestParam(name = "p", defaultValue = "1") Integer page,
+        @RequestParam(name = "min_price", required = false) Integer minPrice,
+        @RequestParam(name = "max_price", required = false) Integer maxPrice,
+        @RequestParam(name = "name_part", required = false) String namePart
+    ) {
+        if (page < 1){
+            page = 1;
+        }
+        return productService.find(minPrice, maxPrice, namePart, page);
+    }
+
+
     @GetMapping("/products/{id}")
     public Product getProductById(@PathVariable Long id) {
         return productService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product is not found: " + id));
@@ -29,10 +44,6 @@ public class ProductController {
 //        return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(), "Product not found, id: " + id), HttpStatus.NOT_FOUND);
 //    }
 
-    @GetMapping("/products")
-    public List<Product> getAllProducts() {
-        return productService.findAll();
-    }
 
     @PostMapping("/products")
     public Product saveNewProduct(@RequestBody Product product) {
@@ -53,15 +64,5 @@ public class ProductController {
     @GetMapping("/products/price_between")
     public List<Product> findProductsByPriceBetween(@RequestParam(defaultValue = "0") Integer min, @RequestParam(defaultValue = "0") Integer max) {
         return productService.findAllByPriceBetween(min, max);
-    }
-
-    @GetMapping("/products/price_more/{min_price}")
-    public List<Product> findProductsWithPriceMoreThanMin(@PathVariable(name = "min_price") Integer min) {
-        return productService.findProductsWithPriceMoreThanMin(min);
-    }
-
-    @GetMapping("/products/price_less/{max_price}")
-    public List<Product> findProductsWithPriceLessThanMax(@PathVariable(name = "max_price") Integer max) {
-        return productService.findProductsWithPriceLessThanMax(max);
     }
 }

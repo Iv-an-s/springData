@@ -17,13 +17,34 @@
 <div class="container" ng-controller="indexController">
     <h3>Product List</h3>
 
-    <form novalidate ng-submit="minMaxFilter()">
-        <input class="form-control" type="number" placeholder="Min" ng-model="sortedList.min">
+    <form novalidate ng-submit="loadProducts()">
+        <div class="form-floating input-group-sm">
+            <input type="text" class="form-control" id="filterName" placeholder="" ng-model="filter.name_part">
+            <label for="filterName">Название продукта</label>
+        </div>
         <p></p>
-        <input class="form-control" type="number" placeholder="Max" ng-model="sortedList.max">
+        <div class="form-floating input-group-sm">
+            <input type="number" class="form-control" id="filterMinPrice" placeholder="" ng-model="filter.min_price">
+            <label for="filterMinPrice">Минимальная цена</label>
+        </div>
         <p></p>
-        <button type="submit" class="btn btn-primary">Обновить список продуктов</button>
+        <div class="form-floating input-group-sm">
+            <input type="number" class="form-control" id="filterMaxPrice" placeholder="" ng-model="filter.max_price">
+            <label for="filterMaxPrice">Максимальная цена</label>
+        </div>
+        <p></p>
+        <button class="btn btn-outline-warning btn-sm" style="width: 100%;" type="submit">Применить</button>
     </form>
+
+
+
+<!--    <form novalidate ng-submit="minMaxFilter()">-->
+<!--        <input class="form-control" type="number" placeholder="Min" ng-model="sortedList.min">-->
+<!--        <p></p>-->
+<!--        <input class="form-control" type="number" placeholder="Max" ng-model="sortedList.max">-->
+<!--        <p></p>-->
+<!--        <button type="submit" class="btn btn-primary">Обновить список продуктов</button>-->
+<!--    </form>-->
 
     <table class="table table-hover" cellspacing="0" cellpadding="0">
         <tr>

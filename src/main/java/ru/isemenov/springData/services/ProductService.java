@@ -1,9 +1,13 @@
 package ru.isemenov.springData.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.isemenov.springData.entities.Product;
 import ru.isemenov.springData.exceptions.ResourceNotFoundException;
 import ru.isemenov.springData.repositories.ProductRepository;
+import ru.isemenov.springData.repositories.specifications.ProductSpecifications;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -17,6 +21,21 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    public Page<Product> find(Integer minPrice, Integer maxPrice, String namePart, Integer page){
+        Specification <Product> spec = Specification.where(null);
+        if(minPrice != null){
+            spec = spec.and(ProductSpecifications.priceGreaterOrEqualsThan(minPrice));
+        }
+        if (maxPrice != null){
+            spec = spec.and(ProductSpecifications.priceLessOrEqualsThan(maxPrice));
+        }
+        if (namePart != null){
+            spec = spec.and(ProductSpecifications.nameLike(namePart));
+        }
+
+        return productRepository.findAll(spec, PageRequest.of(page -1, 5));
+    }
+
     public List<Product> findAll() {
         return productRepository.findAll();
     }
@@ -25,7 +44,7 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(Long id) { //todo исправить
         if (productRepository.existsById(id)) {
             productRepository.deleteById(id);
         } else {
@@ -33,22 +52,14 @@ public class ProductService {
         }
     }
 
-    public List<Product> findAllByPriceBetween(Integer min, Integer max) {
-        return productRepository.findAllByPriceBetween(min, max);
-    }
-
-    public List<Product> findProductsWithPriceMoreThanMin(Integer min) {
-        return productRepository.findProductsWithPriceMoreThanMin(min);
-    }
-
-    public List<Product> findProductsWithPriceLessThanMax(Integer max) {
-        return productRepository.findProductsWithPriceLessThanMax(max);
-    }
-
     @Transactional
     public void changePrice(Long productID, Integer delta) {
         Product product = productRepository.findById(productID).orElseThrow(() -> new ResourceNotFoundException("Unable to change product's price. Product not found, id: " + productID));
         product.setPrice(product.getPrice() + delta);
+    }
+
+    public List<Product> findAllByPriceBetween(Integer min, Integer max) {
+        return productRepository.findAllByPriceBetween(min, max);
     }
 
     public Product save(Product product) {
