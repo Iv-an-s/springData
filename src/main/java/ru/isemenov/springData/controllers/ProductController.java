@@ -2,6 +2,7 @@ package ru.isemenov.springData.controllers;
 
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import ru.isemenov.springData.dto.ProductDto;
 import ru.isemenov.springData.entities.Product;
 import ru.isemenov.springData.exceptions.ResourceNotFoundException;
 import ru.isemenov.springData.services.ProductService;
@@ -9,6 +10,7 @@ import ru.isemenov.springData.services.ProductService;
 import java.util.List;
 
 @RestController
+@RequestMapping("api/v1/products")
 public class ProductController {
     private final ProductService productService;
 
@@ -16,8 +18,8 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/products")
-    public Page<Product> getAllProducts(
+    @GetMapping
+    public Page<ProductDto> getAllProducts(
         @RequestParam(name = "p", defaultValue = "1") Integer page,
         @RequestParam(name = "min_price", required = false) Integer minPrice,
         @RequestParam(name = "max_price", required = false) Integer maxPrice,
@@ -26,13 +28,13 @@ public class ProductController {
         if (page < 1){
             page = 1;
         }
-        return productService.find(minPrice, maxPrice, namePart, page);
+        return productService.find(minPrice, maxPrice, namePart, page).map(p -> new ProductDto(p));
     }
 
 
-    @GetMapping("/products/{id}")
-    public Product getProductById(@PathVariable Long id) {
-        return productService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product is not found: " + id));
+    @GetMapping("/{id}")
+    public ProductDto getProductById(@PathVariable Long id) {
+        return productService.findById(id).map(p -> new ProductDto(p)).orElseThrow(() -> new ResourceNotFoundException("Product is not found: " + id));
     }
 
 //    @GetMapping("/products/{id}")
@@ -45,24 +47,26 @@ public class ProductController {
 //    }
 
 
-    @PostMapping("/products")
-    public Product saveNewProduct(@RequestBody Product product) {
-        //не имеем права в теле запроса передавать сущности. В этом примере - для упрощения
-        return productService.save(product);
+    @PostMapping
+    public ProductDto saveNewProduct(@RequestBody ProductDto productDto) {
+        Product product = new Product(productDto);
+        product.setId(null);
+        return new ProductDto(productService.save(product));
     }
 
-    @GetMapping("/products/delete/{id}")
+    @PutMapping
+    public ProductDto updateProduct(@RequestBody ProductDto productDto){
+        Product product = new Product(productDto);
+        return new ProductDto(productService.save(product));
+    }
+
+    @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         productService.deleteById(id);
     }
 
-    @GetMapping("/products/change_price")
+    @GetMapping("/change_price")
     public void changePrice(@RequestParam Long productId, @RequestParam Integer delta) {
         productService.changePrice(productId, delta);
-    }
-
-    @GetMapping("/products/price_between")
-    public List<Product> findProductsByPriceBetween(@RequestParam(defaultValue = "0") Integer min, @RequestParam(defaultValue = "0") Integer max) {
-        return productService.findAllByPriceBetween(min, max);
     }
 }

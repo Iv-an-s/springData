@@ -1,5 +1,7 @@
 package ru.isemenov.springData.entities;
 
+import ru.isemenov.springData.dto.ProductDto;
+
 import javax.persistence.*;
 
 @Entity
@@ -41,5 +43,11 @@ public class Product {
     }
 
     public Product() {
+    }
+
+    public Product(ProductDto productDto){
+        this.id = productDto.getId();
+        this.name = productDto.getName();
+        this.price = productDto.getPrice();
     }
 }
