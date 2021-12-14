@@ -1,5 +1,5 @@
 angular.module('app', []).controller('indexController', function ($scope, $http){
-    const contextPath = 'http://localhost:8189/app';
+    const contextPath = 'http://localhost:8189/app/api/v1';
 
     $scope.loadProducts = function (pageIndex = 1) {
         console.log('Click!')
@@ -16,13 +16,6 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         });
     };
 
-//    $scope.loadProducts = function(){
-//        $http.get(contextPath + '/products')
-//            .then(function(response){
-//                $scope.ProductList=response.data;
-//        });
-//    }
-
     $scope.changePrice = function (productId, delta) {
         console.log('Click!')
         $http({
@@ -38,28 +31,12 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     };
 
     $scope.deleteProduct = function (productId) {
-        $http.get(contextPath + '/products/delete/' + productId)
+        $http.delete(contextPath + '/products/delete/' + productId)
             .then(function (response) {
                 //alert('DELETED');
                 $scope.loadProducts();
             });
     }
-
-//    $scope.minMaxFilter = function () {
-//        console.log($scope.sortedList);
-//        $http({
-//            url: contextPath + '/products/price_between',
-//            method: 'GET',
-//            params: {
-//                min: $scope.sortedList.min,
-//                max: $scope.sortedList.max
-//            }
-//        }).then(function (response) {
-//            $scope.ProductList = response.data;
-//            $scope.sortedList.min = 0;
-//            $scope.sortedList.max = 1000000;
-//        });
-//    }
 
     $scope.createProductJson = function (){
         console.log($scope.newProductJson);
@@ -70,20 +47,20 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         })
     }
 
-    $scope.sumTwoNumbers = function (){
-            console.log($scope.calcAdd);
-            $http({
-                url: contextPath + '/calc/add',
-                method: 'get',
-                params: {
-                    a: $scope.calcAdd.a,
-                    b: $scope.calcAdd.b
-                }
-            }).then(function(response){
-            alert('Сумма равна ' + response.data.value)
-            $scope.calcAdd = null;
-        });
-    }
+//    $scope.sumTwoNumbers = function (){
+//            console.log($scope.calcAdd);
+//            $http({
+//                url: contextPath + '/calc/add',
+//                method: 'get',
+//                params: {
+//                    a: $scope.calcAdd.a,
+//                    b: $scope.calcAdd.b
+//                }
+//            }).then(function(response){
+//            alert('Сумма равна ' + response.data.value)
+//            $scope.calcAdd = null;
+//        });
+//    }
 
 
     $scope.loadProducts();
