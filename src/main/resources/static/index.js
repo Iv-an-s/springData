@@ -9,10 +9,10 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             params: {
                 min_price: $scope.filter ? $scope.filter.min_price : null,
                 max_price: $scope.filter ? $scope.filter.max_price : null,
-                name_part: $scope.filter ? $scope.filter.name_part : null
+                title_part: $scope.filter ? $scope.filter.title_part : null
             }
         }).then(function (response) {
-            $scope.ProductList = response.data.content;
+            $scope.ProductsPage = response.data;
         });
     };
 
@@ -30,22 +30,22 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         });
     };
 
-    $scope.deleteProduct = function (productId) {
-        $http.delete(contextPath + '/products/delete/' + productId)
-            .then(function (response) {
-                //alert('DELETED');
-                $scope.loadProducts();
-            });
-    }
+//    $scope.deleteProduct = function (productId) {
+//        $http.delete(contextPath + '/products/delete/' + productId)
+//            .then(function (response) {
+//                //alert('DELETED');
+//                $scope.loadProducts();
+//            });
+//    }
 
-    $scope.createProductJson = function (){
-        console.log($scope.newProductJson);
-        $http.post(contextPath + '/products', $scope.newProductJson)
-        .then(function (response){
-            $scope.loadProducts();
-            $scope.newProductJson = null;
-        })
-    }
+//    $scope.createProductJson = function (){
+//        console.log($scope.newProductJson);
+//        $http.post(contextPath + '/products', $scope.newProductJson)
+//        .then(function (response){
+//            $scope.loadProducts();
+//            $scope.newProductJson = null;
+//        })
+//    }
 
 //    $scope.sumTwoNumbers = function (){
 //            console.log($scope.calcAdd);

@@ -19,7 +19,7 @@
 
     <form novalidate ng-submit="loadProducts()">
         <div class="form-floating input-group-sm">
-            <input type="text" class="form-control" id="filterName" placeholder="" ng-model="filter.name_part">
+            <input type="text" class="form-control" id="filterName" placeholder="" ng-model="filter.title_part">
             <label for="filterName">Название продукта</label>
         </div>
         <p></p>
@@ -36,27 +36,18 @@
         <button class="btn btn-outline-warning btn-sm" style="width: 100%;" type="submit">Применить</button>
     </form>
 
-
-
-<!--    <form novalidate ng-submit="minMaxFilter()">-->
-<!--        <input class="form-control" type="number" placeholder="Min" ng-model="sortedList.min">-->
-<!--        <p></p>-->
-<!--        <input class="form-control" type="number" placeholder="Max" ng-model="sortedList.max">-->
-<!--        <p></p>-->
-<!--        <button type="submit" class="btn btn-primary">Обновить список продуктов</button>-->
-<!--    </form>-->
-
+    <h3>Каталог товаров</h3>
     <table class="table table-hover" cellspacing="0" cellpadding="0">
         <tr>
             <td>ID</td>
-            <td>Name</td>
+            <td>Title</td>
             <td>Price</td>
             <td>Action</td>
         </tr>
         <tbody>
-        <tr ng-repeat="p in ProductList">
+        <tr ng-repeat="p in ProductsPage.content">
             <td>{{p.id}}</td>
-            <td>{{p.name}}</td>
+            <td>{{p.title}}</td>
             <td>
                 <button class="btn btn-primary" ng-click="changePrice(p.id, -1)">-</button>
                 {{p.price}}
@@ -69,14 +60,14 @@
         </tbody>
     </table>
 
-    <h3>Добавить продукт через Json</h3>
-    <form novalidate ng-submit="createProductJson()">
-        <input class="form-control" type="text" placeholder="Название" ng-model="newProductJson.name">
-        <p></p>
-        <input class="form-control" type="number" placeholder="Цена" ng-model="newProductJson.price">
-        <p></p>
-        <button type="submit" class="btn btn-primary">Сохранить</button>
-    </form>
+<!--    <h3>Добавить продукт через Json</h3>-->
+<!--    <form novalidate ng-submit="createProductJson()">-->
+<!--        <input class="form-control" type="text" placeholder="Название" ng-model="newProductJson.title">-->
+<!--        <p></p>-->
+<!--        <input class="form-control" type="number" placeholder="Цена" ng-model="newProductJson.price">-->
+<!--        <p></p>-->
+<!--        <button type="submit" class="btn btn-primary">Сохранить</button>-->
+<!--    </form>-->
 
 <!--    <h3>Форма сложения</h3>-->
 <!--    <form novalidate ng-submit="sumTwoNumbers()">-->

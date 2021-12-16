@@ -1,38 +1,40 @@
 package ru.isemenov.springData.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import ru.isemenov.springData.converters.ProductConverter;
 import ru.isemenov.springData.dto.ProductDto;
 import ru.isemenov.springData.entities.Product;
 import ru.isemenov.springData.exceptions.ResourceNotFoundException;
-import ru.isemenov.springData.services.ProductService;
+import ru.isemenov.springData.services.ProductsService;
 
 @RestController
 @RequestMapping("api/v1/products")
-public class ProductController {
-    private final ProductService productService;
-
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
+@RequiredArgsConstructor
+public class ProductsController {
+    private final ProductsService productsService;
+    private final ProductConverter productConverter;
 
     @GetMapping
     public Page<ProductDto> getAllProducts(
             @RequestParam(name = "p", defaultValue = "1") Integer page,
             @RequestParam(name = "min_price", required = false) Integer minPrice,
             @RequestParam(name = "max_price", required = false) Integer maxPrice,
-            @RequestParam(name = "name_part", required = false) String namePart
+            @RequestParam(name = "title_part", required = false) String titlePart
     ) {
         if (page < 1) {
             page = 1;
         }
-        return productService.find(minPrice, maxPrice, namePart, page).map(p -> new ProductDto(p));
+        return productsService.findAll(minPrice, maxPrice, titlePart, page).map(
+                p -> productConverter.entityToDto(p));
     }
 
 
     @GetMapping("/{id}")
     public ProductDto getProductById(@PathVariable Long id) {
-        return productService.findById(id).map(p -> new ProductDto(p)).orElseThrow(() -> new ResourceNotFoundException("Product is not found: " + id));
+        Product product = productsService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product is not found: " + id));
+        return productConverter.entityToDto(product);
     }
 
 //    @GetMapping("/products/{id}")
@@ -46,24 +48,25 @@ public class ProductController {
 
     @PostMapping
     public ProductDto saveNewProduct(@RequestBody ProductDto productDto) {
-        Product product = new Product(productDto);
-        product.setId(null);
-        return new ProductDto(productService.save(product));
+        Product product = productConverter.dtoToEntity(productDto);
+        product.setId(null); //todo нужно ли обнулять?
+        productsService.save(product);
+        return productConverter.entityToDto(product);
     }
 
     @PutMapping
     public ProductDto updateProduct(@RequestBody ProductDto productDto) {
-        Product product = new Product(productDto);
-        return new ProductDto(productService.save(product));
+        Product product = productsService.update(productDto);
+        return productConverter.entityToDto(product);
     }
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
-        productService.deleteById(id);
+        productsService.deleteById(id);
     }
 
     @GetMapping("/change_price")
     public void changePrice(@RequestParam Long productId, @RequestParam Integer delta) {
-        productService.changePrice(productId, delta);
+        productsService.changePrice(productId, delta);
     }
 }
