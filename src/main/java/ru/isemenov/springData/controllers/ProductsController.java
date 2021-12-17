@@ -8,6 +8,7 @@ import ru.isemenov.springData.dto.ProductDto;
 import ru.isemenov.springData.entities.Product;
 import ru.isemenov.springData.exceptions.ResourceNotFoundException;
 import ru.isemenov.springData.services.ProductsService;
+import ru.isemenov.springData.validators.ProductValidator;
 
 @RestController
 @RequestMapping("api/v1/products")
@@ -15,6 +16,7 @@ import ru.isemenov.springData.services.ProductsService;
 public class ProductsController {
     private final ProductsService productsService;
     private final ProductConverter productConverter;
+    private final ProductValidator productValidator;
 
     @GetMapping
     public Page<ProductDto> getAllProducts(
@@ -48,6 +50,7 @@ public class ProductsController {
 
     @PostMapping
     public ProductDto saveNewProduct(@RequestBody ProductDto productDto) {
+        productValidator.validate(productDto);
         Product product = productConverter.dtoToEntity(productDto);
         product.setId(null); //todo нужно ли обнулять?
         productsService.save(product);
@@ -56,6 +59,7 @@ public class ProductsController {
 
     @PutMapping
     public ProductDto updateProduct(@RequestBody ProductDto productDto) {
+        productValidator.validate(productDto);
         Product product = productsService.update(productDto);
         return productConverter.entityToDto(product);
     }
