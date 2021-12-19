@@ -2,7 +2,6 @@ package ru.isemenov.springData.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 import ru.isemenov.springData.Cart;
 import ru.isemenov.springData.converters.ProductConverter;
 import ru.isemenov.springData.dto.ProductDto;
@@ -24,8 +23,8 @@ public class CartService {
     public List<ProductDto> showCart() {
         List<Product> productList = cart.getProductList();
         List<ProductDto> productDtoList = new ArrayList<>();
-        for (int i = 0; i < productList.size(); i++) {
-            productDtoList.add(productConverter.entityToDto(productList.get(i)));
+        for (Product product : productList) {
+            productDtoList.add(productConverter.entityToDto(product));
         }
         return productDtoList;
         //return (List<ProductDto>) cart.getProductList().stream().map(p -> productConverter.entityToDto(p));
@@ -33,20 +32,20 @@ public class CartService {
 
     public void addProduct(Long productId) {
         Optional<Product> optionalProduct = productsService.findById(productId);
-        if(optionalProduct.isPresent()){
+        if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
             cart.addProduct(product);
-        }else{
+        } else {
             throw new ResourceNotFoundException("Product not found" + productId);
         }
     }
 
     public void removeProduct(Long productId) {
-        Optional<Product> optionalProduct = productsService.findById(productId);
-        if(optionalProduct.isPresent()){
-            cart.removeProduct(optionalProduct.get());
-        }else{
-            throw new ResourceNotFoundException("Product not found" + productId);
+        List<Product> productList = cart.getProductList();
+        for (Product product : productList) {
+            if (product.getId().equals(productId)) {
+                cart.removeProduct(product);
+            }
         }
     }
 

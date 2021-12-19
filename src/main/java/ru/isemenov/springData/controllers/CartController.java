@@ -1,7 +1,10 @@
 package ru.isemenov.springData.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.isemenov.springData.dto.ProductDto;
 import ru.isemenov.springData.services.CartService;
 

@@ -2,7 +2,6 @@ package ru.isemenov.springData;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
-import ru.isemenov.springData.dto.ProductDto;
 import ru.isemenov.springData.entities.Product;
 
 import java.util.ArrayList;
@@ -17,11 +16,11 @@ public class Cart {
         this.productList = new ArrayList<>();
     }
 
-    public void addProduct(Product product){
+    public void addProduct(Product product) {
         productList.add(product);
     }
 
-    public void removeProduct(Product product){
+    public void removeProduct(Product product) {
         productList.remove(product);
     }
 

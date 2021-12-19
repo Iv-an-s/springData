@@ -64,6 +64,13 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         });
     }
 
+    $scope.clear = function (){
+        $http.get(contextPath + '/carts/clear')
+            .then(function (response) {
+                $scope.loadCart();
+            });
+    }
+
 
 //    $scope.deleteProduct = function (productId) {
 //        $http.delete(contextPath + '/products/delete/' + productId)
