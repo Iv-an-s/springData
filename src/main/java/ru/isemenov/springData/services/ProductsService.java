@@ -38,7 +38,7 @@ public class ProductsService {
         return productsRepository.findById(id);
     }
 
-    public void deleteById(Long id) { //todo исправить
+    public void deleteById(Long id) {
         if (productsRepository.existsById(id)) {
             productsRepository.deleteById(id);
         } else {
