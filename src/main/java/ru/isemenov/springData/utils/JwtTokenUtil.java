@@ -43,7 +43,7 @@ public class JwtTokenUtil {
     }
 
     public String getUsernameFromToken(String token){
-        return getClaimFromToken(token, claims -> claims.getSubject());
+        return getClaimFromToken(token, Claims :: getSubject);
     }
 
     public List<String> getRoles(String token){
@@ -51,14 +51,17 @@ public class JwtTokenUtil {
     }
 
     private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver){
-        Claims claims = getAllClaimsFromToken(token);
-        return claimsResolver.apply(claims);
+        //вытаскиваем из токена какую-то информацию. В параметры подаем токен, и некую функцию, которая из Claims вытащит
+        //какой-то интересующий нас кусок данных
+        Claims claims = getAllClaimsFromToken(token); // все Claims из токена получили (проверили токен, вытащили тело данных)
+        return claimsResolver.apply(claims); // вытаскиваем кусок данных с помощью функции, которая нам пришла.
     }
 
     private Claims getAllClaimsFromToken(String token){
-        return Jwts.parser()
-            .setSigningKey(secret)
-            .parseClaimsJws(token)
-            .getBody();
+        // когда к нам приходит токен, мы можем достать из него все полезные данные:
+        return Jwts.parser() // создаем парсер из подключенной библиотеки
+            .setSigningKey(secret) // подшиваем к парсеру secret key чтобы он мог по header и payload сгенерировать подпись и сравнить подписи
+            .parseClaimsJws(token) // Если подпись корректная и время жизни позволяет - парсим токен, и
+            .getBody(); // вытаскиваем оттуда claims - список ключей/значений
     }
 }
