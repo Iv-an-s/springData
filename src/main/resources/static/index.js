@@ -81,11 +81,9 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
     };
 
     $scope.loadCart = function (){
-        console.log('сработала функция loadCart')
         $http.get(contextPath + '/carts')
         .then(function (response) {
             $scope.Cart = response.data;
-            console.log($scope.Cart)
         });
     };
 
@@ -113,46 +111,25 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         });
     }
 
-    $scope.clear = function (){
+    $scope.clearCart = function (){
         $http.get(contextPath + '/carts/clear')
             .then(function (response) {
                 $scope.loadCart();
             });
     }
 
-
-//    $scope.deleteProduct = function (productId) {
-//        $http.delete(contextPath + '/products/delete/' + productId)
-//            .then(function (response) {
-//                //alert('DELETED');
-//                $scope.loadProducts();
-//            });
-//    }
-
-//    $scope.createProductJson = function (){
-//        console.log($scope.newProductJson);
-//        $http.post(contextPath + '/products', $scope.newProductJson)
-//        .then(function (response){
-//            $scope.loadProducts();
-//            $scope.newProductJson = null;
-//        })
-//    }
-
-//    $scope.sumTwoNumbers = function (){
-//            console.log($scope.calcAdd);
-//            $http({
-//                url: contextPath + '/calc/add',
-//                method: 'get',
-//                params: {
-//                    a: $scope.calcAdd.a,
-//                    b: $scope.calcAdd.b
-//                }
-//            }).then(function(response){
-//            alert('Сумма равна ' + response.data.value)
-//            $scope.calcAdd = null;
-//        });
-//    }
-
+    $scope.createOrder = function (){
+            $http({
+                url: contextPath + '/orders',
+                method: 'POST',
+                params:{
+                    address: $scope.order.Address,
+                    phone: $scope.order.Phone
+                }
+            }).then(function successCallback(response) {
+            $scope.loadCart();
+        });
+    }
 
     $scope.loadProducts();
     $scope.loadCart();
