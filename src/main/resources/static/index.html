@@ -123,12 +123,12 @@
 
     <form novalidate ng-show="isUserLoggedIn()" ng-submit="createOrder()">
         <div class="form-floating input-group-sm">
-            <input type="text" class="form-control" id="addressField" placeholder="" ng-model="order.Address">
+            <input class="form-control" type="text" id="addressField" placeholder="" ng-model="order.address">
             <label for="addressField">Адрес</label>
         </div>
         <p></p>
         <div class="form-floating input-group-sm">
-            <input type="text" class="form-control" id="phoneField" placeholder="" ng-model="order.Phone">
+            <input class="form-control" type="text" id="phoneField" placeholder="" ng-model="order.phone">
             <label for="phoneField">Телефон</label>
         </div>
         <p></p>

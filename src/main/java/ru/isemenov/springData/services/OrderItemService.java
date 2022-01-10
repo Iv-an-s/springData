@@ -13,8 +13,8 @@ import java.util.List;
 public class OrderItemService {
     private final OrderItemRepository orderItemRepository;
 
-    public void saveOrderItemsFromOrder(List<OrderItemDto> itemDtoList, Long orderId){
-        for(OrderItemDto o : itemDtoList){
+    public void saveOrderItemsFromOrder(List<OrderItemDto> itemDtoList, Long orderId) {
+        for (OrderItemDto o : itemDtoList) {
             OrderItem orderItem = new OrderItem(o.getProductId(), orderId, o.getQuantity(), o.getPricePerProduct(), o.getPrice());
             orderItemRepository.save(orderItem);
         }

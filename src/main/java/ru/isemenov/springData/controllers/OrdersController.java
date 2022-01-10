@@ -2,10 +2,10 @@ package ru.isemenov.springData.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import ru.isemenov.springData.dto.OrderDto;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.isemenov.springData.dto.OrderInfoDto;
 import ru.isemenov.springData.services.OrderService;
 
@@ -19,8 +19,8 @@ public class OrdersController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<?> createOrder(@RequestBody OrderInfoDto orderInfoDto, Principal principal){
-        OrderDto orderDto = orderService.createOrder(orderInfoDto, principal.getName());
-        return new ResponseEntity<>(orderDto, HttpStatus.OK);
+    public void createOrder(@RequestBody OrderInfoDto orderInfoDto, Principal principal) {
+        orderService.createOrder(orderInfoDto, principal.getName());
+        //return new ResponseEntity<>(orderDto, HttpStatus.OK);
     }
 }

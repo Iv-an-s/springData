@@ -6,7 +6,6 @@ import ru.isemenov.springData.converters.OrderConverter;
 import ru.isemenov.springData.dto.Cart;
 import ru.isemenov.springData.dto.OrderDto;
 import ru.isemenov.springData.dto.OrderInfoDto;
-import ru.isemenov.springData.dto.OrderItemDto;
 import ru.isemenov.springData.entities.Order;
 import ru.isemenov.springData.exceptions.ResourceNotFoundException;
 import ru.isemenov.springData.repositories.OrderRepository;
@@ -23,7 +22,7 @@ public class OrderService {
 
     public OrderDto createOrder(OrderInfoDto orderDto, String username) {
         Cart cart = cartService.getCurrentCart();
-        Long userId = userRepository.findByUsername(username).orElseThrow(()-> new ResourceNotFoundException("there is no user in database with username: " + username)).getId();
+        Long userId = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("there is no user in database with username: " + username)).getId();
         int totalPrice = cart.getTotalPrice();
         String address = orderDto.getAddress();
         String phone = orderDto.getPhone();

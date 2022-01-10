@@ -119,15 +119,11 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
     }
 
     $scope.createOrder = function (){
-            $http({
-                url: contextPath + '/orders',
-                method: 'POST',
-                params:{
-                    address: $scope.order.Address,
-                    phone: $scope.order.Phone
-                }
-            }).then(function successCallback(response) {
+        console.log($scope.order)
+        $http.post(contextPath + '/orders', $scope.order)
+        .then(function (response){
             $scope.loadCart();
+            $scope.order = null;
         });
     }
 

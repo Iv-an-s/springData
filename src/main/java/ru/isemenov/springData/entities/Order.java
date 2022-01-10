@@ -1,6 +1,5 @@
 package ru.isemenov.springData.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
