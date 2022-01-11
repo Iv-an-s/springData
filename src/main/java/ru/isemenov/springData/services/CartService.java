@@ -1,55 +1,37 @@
 package ru.isemenov.springData.services;
 
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.isemenov.springData.Cart;
-import ru.isemenov.springData.converters.ProductConverter;
-import ru.isemenov.springData.dto.ProductDto;
+import ru.isemenov.springData.dto.Cart;
 import ru.isemenov.springData.entities.Product;
 import ru.isemenov.springData.exceptions.ResourceNotFoundException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import javax.annotation.PostConstruct;
 
 @Service
 @RequiredArgsConstructor
 public class CartService {
-    private final Cart cart;
     private final ProductsService productsService;
-    private final ProductConverter productConverter;
+    private Cart cart;
 
-
-    public List<ProductDto> showCart() {
-        List<Product> productList = cart.getProductList();
-        List<ProductDto> productDtoList = new ArrayList<>();
-        for (Product product : productList) {
-            productDtoList.add(productConverter.entityToDto(product));
-        }
-        return productDtoList;
-        //return (List<ProductDto>) cart.getProductList().stream().map(p -> productConverter.entityToDto(p));
+    @PostConstruct
+    public void init(){
+        cart = new Cart();
     }
 
-    public void addProduct(Long productId) {
-        Optional<Product> optionalProduct = productsService.findById(productId);
-        if (optionalProduct.isPresent()) {
-            Product product = optionalProduct.get();
-            cart.addProduct(product);
-        } else {
-            throw new ResourceNotFoundException("Product not found" + productId);
+    public Cart getCurrentCart(){
+        return cart;
+    }
+
+    public void addProductByIdToCart(Long productId){
+        if(!getCurrentCart().addProduct(productId)){
+            Product product = productsService.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Невозможно добавить продукт в корзину. Продукт с id:" + productId + " не найден"));
+            getCurrentCart().addProduct(product);
         }
     }
 
-    public void removeProduct(Long productId) {
-        List<Product> productList = cart.getProductList();
-        for (Product product : productList) {
-            if (product.getId().equals(productId)) {
-                cart.removeProduct(product);
-            }
-        }
-    }
-
-    public void clear() {
-        cart.clear();
+    public void clear(){
+        getCurrentCart().clear();
     }
 }
