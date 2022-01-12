@@ -87,6 +87,13 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         });
     };
 
+    $scope.loadOrders = function (){
+        $http.get(contextPath + '/orders')
+        .then(function (response) {
+            $scope.MyOrders = response.data;
+        });
+    };
+
     $scope.deleteProductFromCart = function (productId){
         $http({
             url: contextPath + '/carts/remove_product/' + productId,
@@ -129,4 +136,5 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
 
     $scope.loadProducts();
     $scope.loadCart();
+    $scope.loadOrders();
 });
