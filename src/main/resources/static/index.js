@@ -1,24 +1,40 @@
-angular.module('app', ['ngStorage']).controller('indexController', function ($scope, $rootScope, $http, $localStorage){
-    const contextPath = 'http://localhost:8189/app/api/v1';
+(function () {
+    angular
+        .module('market-front', ['ngRoute', 'ngStorage'])
+        .config(config)
+        .run(run);
 
-    if ($localStorage.springWebUser) {
-        $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.springWebUser.token;
+    function config($routeProvider) {
+        $routeProvider
+            .when('/', {
+                templateUrl: 'welcome/welcome.html',
+                controller: 'welcomeController'
+            })
+            .when('/store', {
+                templateUrl: 'store/store.html',
+                controller: 'storeController'
+            })
+            .when('/orders', {
+                templateUrl: 'orders/orders.html',
+                controller: 'ordersController'
+            })
+            .when('/cart', {
+                templateUrl: 'cart/cart.html',
+                controller: 'cartController'
+            })
+            .otherwise({
+                redirectTo: '/'
+            });
     }
 
-    $scope.loadProducts = function (pageIndex = 1) {
-        console.log('Click!')
-        $http({
-            url: contextPath + '/products',
-            method: 'GET',
-            params: {
-                min_price: $scope.filter ? $scope.filter.min_price : null,
-                max_price: $scope.filter ? $scope.filter.max_price : null,
-                title_part: $scope.filter ? $scope.filter.title_part : null
-            }
-        }).then(function (response) {
-            $scope.ProductsPage = response.data;
-        });
-    };
+    function run($rootScope, $http, $localStorage) {
+        if ($localStorage.springWebUser) {
+            $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.springWebUser.token;
+        }
+    }
+})();
+
+angular.module('market-front').controller('indexController', function ($rootScope, $scope, $http, $location, $localStorage) {
 
     $scope.tryToAuth = function () {
         $http.post('http://localhost:8189/app/auth', $scope.user)
@@ -29,19 +45,17 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
 
                     $scope.user.username = null;
                     $scope.user.password = null;
+
+                    $location.path('/');
                 }
             }, function errorCallback(response) {
-        });
+            });
     };
 
     $scope.tryToLogout = function () {
         $scope.clearUser();
-        if ($scope.user.username) {
-            $scope.user.username = null;
-        }
-        if ($scope.user.password) {
-            $scope.user.password = null;
-        }
+        $scope.user = null;
+        $location.path('/');
     };
 
     $scope.clearUser = function () {
@@ -56,85 +70,4 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
             return false;
         }
     };
-
-    $scope.showCurrentUserInfo = function () {
-        $http.get('http://localhost:8189/app/api/v1/profile')
-            .then(function successCallback(response) {
-                alert('MY NAME IS: ' + response.data.username);
-            }, function errorCallback(response) {
-                alert('UNAUTHORIZED');
-        });
-    }
-
-    $scope.changePrice = function (productId, delta) {
-        console.log('Click!')
-        $http({
-            url: contextPath + '/products/change_price',
-            method: 'GET',
-            params: {
-                productId: productId,
-                delta: delta
-            }
-        }).then(function(response){
-            $scope.loadProducts();
-        });
-    };
-
-    $scope.loadCart = function (){
-        $http.get(contextPath + '/carts')
-        .then(function (response) {
-            $scope.Cart = response.data;
-        });
-    };
-
-    $scope.loadOrders = function (){
-        $http.get(contextPath + '/orders')
-        .then(function (response) {
-            $scope.MyOrders = response.data;
-        });
-    };
-
-    $scope.deleteProductFromCart = function (productId){
-        $http({
-            url: contextPath + '/carts/remove_product/' + productId,
-            method: 'GET',
-            params: {
-                productId: productId
-            }
-        }).then(function(response){
-            $scope.loadCart();
-        });
-    };
-
-    $scope.addToCart = function (productId) {
-        $http({
-            url: contextPath + '/carts/add/' + productId,
-            method: 'GET',
-            params: {
-                productId: productId
-            }
-            }).then(function (response) {
-            $scope.loadCart();
-        });
-    }
-
-    $scope.clearCart = function (){
-        $http.get(contextPath + '/carts/clear')
-            .then(function (response) {
-                $scope.loadCart();
-            });
-    }
-
-    $scope.createOrder = function (){
-        console.log($scope.order)
-        $http.post(contextPath + '/orders', $scope.order)
-        .then(function (response){
-            $scope.loadCart();
-            $scope.order = null;
-        });
-    }
-
-    $scope.loadProducts();
-    $scope.loadCart();
-    $scope.loadOrders();
 });
