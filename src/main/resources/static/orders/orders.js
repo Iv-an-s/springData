@@ -9,6 +9,5 @@ angular.module('market-front').controller('ordersController', function ($scope, 
     }
 
     $scope.loadOrders();
-
 });
 

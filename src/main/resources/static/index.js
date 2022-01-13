@@ -1,4 +1,5 @@
 (function () {
+
     angular
         .module('market-front', ['ngRoute', 'ngStorage'])
         .config(config)
