@@ -32,13 +32,13 @@
 
         if ($localStorage.springWebUser) {
             try {
-                let jwt = $localStorage.springWebUser.token;
-                let payload = JSON.parse(atob(jwt.split('.')[1]));
-                let currentTime = parseInt(new Date().getTime() / 1000);
-                if (currentTime > payload.exp) {
-                    console.log("Token is expired!!!");
-                    delete $localStorage.springWebUser;
-                    $http.defaults.headers.common.Authorization = '';
+                let jwt = $localStorage.springWebUser.token;                   // достаем токен из локального хранилища
+                let payload = JSON.parse(atob(jwt.split('.')[1]));             // парсим токен, достаем payload
+                let currentTime = parseInt(new Date().getTime() / 1000);       // запросили текущее время на фронте
+                if (currentTime > payload.exp) {                               // сравниваем c expired, если больше - то:
+                    console.log("Token is expired!!!");                        // (с фронта время в мсек, с бека - в сек!)
+                    delete $localStorage.springWebUser;                        // удаляем юзера из локального хранилища
+                    $http.defaults.headers.common.Authorization = '';          // обнуляем хедер Authorization
                 }
             } catch (e) {
             }
