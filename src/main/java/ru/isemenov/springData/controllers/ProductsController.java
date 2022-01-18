@@ -34,7 +34,6 @@ public class ProductsController {
                 p -> productConverter.entityToDto(p));
     }
 
-
     @GetMapping("/{id}")
     public ProductDto getProductById(@PathVariable Long id) {
         Product product = productsService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product is not found: " + id));
