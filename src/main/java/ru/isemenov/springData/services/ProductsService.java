@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import ru.isemenov.springData.dto.CategoryDto;
 import ru.isemenov.springData.dto.ProductDto;
 import ru.isemenov.springData.entities.Product;
 import ru.isemenov.springData.exceptions.ResourceNotFoundException;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class ProductsService {
     private final ProductsRepository productsRepository;
 
-    public Page<Product> findAll(Integer minPrice, Integer maxPrice, String titlePart, Integer page) {
+    public Page<Product> findAll(Integer minPrice, Integer maxPrice, String titlePart, CategoryDto category, Integer page) {
         Specification<Product> spec = Specification.where(null);
         if (minPrice != null) {
             spec = spec.and(ProductsSpecifications.priceGreaterOrEqualsThan(minPrice));
@@ -29,6 +30,9 @@ public class ProductsService {
         }
         if (titlePart != null) {
             spec = spec.and(ProductsSpecifications.titleLike(titlePart));
+        }
+        if (category != null) {
+            spec = spec.and(ProductsSpecifications.categoryTitleIs(category.getTitle()));
         }
 
         return productsRepository.findAll(spec, PageRequest.of(page - 1, 5));
