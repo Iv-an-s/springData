@@ -20,4 +20,5 @@ public class ProductsSpecifications {
     public static Specification<Product> categoryTitleIs(String title) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("category").get("title"), title);
     }
+
 }
