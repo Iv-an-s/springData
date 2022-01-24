@@ -14,6 +14,8 @@ public interface ProductsRepository extends JpaRepository<Product, Long>, JpaSpe
 
     List<Product> findAllByPriceBetween(Integer min, Integer max);
 
+    List<Product> findAllBy();
+
     @Query("select p from Product p where p.price > :min")
     List<Product> findProductsWithPriceMoreThanMin(Integer min);
 

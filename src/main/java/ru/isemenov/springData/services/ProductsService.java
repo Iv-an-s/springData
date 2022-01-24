@@ -13,6 +13,7 @@ import ru.isemenov.springData.repositories.ProductsRepository;
 import ru.isemenov.springData.repositories.specifications.ProductsSpecifications;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,6 +37,10 @@ public class ProductsService {
         }
 
         return productsRepository.findAll(spec, PageRequest.of(page - 1, 5));
+    }
+
+    public List<Product> findAllBy(){
+        return productsRepository.findAllBy();
     }
 
     public Optional<Product> findById(Long id) {
