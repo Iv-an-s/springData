@@ -23,7 +23,7 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         return new ServletRegistrationBean(servlet, "/ws/*");
     }
 
-    // http://localhost:8080/ws/groups.wsdl
+    // http://localhost:8189/app/ws/products.wsdl
     @Bean(name = "products")
     public DefaultWsdl11Definition groupsWsdl11Definition(XsdSchema groupsSchema) {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
@@ -34,24 +34,8 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         return wsdl11Definition;
     }
 
-    // http://localhost:8080/ws/students.wsdl
-//    @Bean(name = "students")
-//    public DefaultWsdl11Definition studentsWsdl11Definition(XsdSchema studentsSchema) {
-//        DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
-//        wsdl11Definition.setPortTypeName("StudentsPort");
-//        wsdl11Definition.setLocationUri("/ws");
-//        wsdl11Definition.setTargetNamespace("http://www.flamexander.com/spring/ws/students");
-//        wsdl11Definition.setSchema(studentsSchema);
-//        return wsdl11Definition;
-//    }
-
     @Bean
     public XsdSchema productsSchema() {
         return new SimpleXsdSchema(new ClassPathResource("products.xsd"));
     }
-
-//    @Bean
-//    public XsdSchema studentsSchema() {
-//        return new SimpleXsdSchema(new ClassPathResource("students.xsd"));
-//    }
 }

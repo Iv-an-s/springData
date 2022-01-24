@@ -20,15 +20,15 @@ public class ProductEndpoint {
     private final ProductsService productsService;
 
     /*
-        Пример запроса: POST http://localhost:8080/ws
+        Пример запроса: POST http://localhost:8189/app/ws
 
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-          xmlns:f="http://www.flamexander.com/spring/ws/groups">
+          xmlns:f="http://www.isemenov.ru/springData/products">
             <soapenv:Header/>
             <soapenv:Body>
-                <f:getGroupByTitleRequest>
-                    <f:title>ABC-123</f:title>
-                </f:getGroupByTitleRequest>
+                <f:getProductByIdRequest>
+                    <f:title>1</f:title>
+                </f:getProductByIdRequest>
             </soapenv:Body>
         </soapenv:Envelope>
      */
