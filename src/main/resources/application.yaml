@@ -5,6 +5,7 @@ server:
 utils:
   cart:
     prefix: SPRING_WEB_
+
 spring:
   datasource:
     driver-class-name: org.h2.Driver
