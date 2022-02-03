@@ -1,15 +1,12 @@
 server:
-  port: 8189
+  port: 8188
   servlet:
-    context-path: /web-market-core
-utils:
-  cart:
-    prefix: SPRING_WEB_
+    context-path: /web-market-auth
 
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:mydatabase;MODE=PostgreSQL
+    url: jdbc:h2:file:./users;MODE=PostgreSQL
     username: sa
     password:
   jpa:
@@ -22,3 +19,7 @@ spring:
       enabled: true
       settings:
         web-allow-others: false
+
+jwt:
+  secret: aevsggrixfnfgkrgnjfshgeilgskdfnvsjbvlkghri
+  lifetime: 36000000
