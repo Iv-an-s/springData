@@ -1,13 +1,11 @@
-package com.geekbrains.isemenov.spring.web.core.controllers;
+package com.geekbrains.isemenov.spring.web.cart.controller;
+
 
 import com.geekbrains.isemenov.spring.web.api.dto.StringResponse;
+import com.geekbrains.isemenov.spring.web.cart.dto.Cart;
+import com.geekbrains.isemenov.spring.web.cart.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import com.geekbrains.isemenov.spring.web.core.dto.Cart;
-import com.geekbrains.isemenov.spring.web.core.services.CartService;
-import com.geekbrains.isemenov.spring.web.core.services.ProductsService;
-
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/v1/cart")
@@ -15,7 +13,6 @@ import java.security.Principal;
 //@CrossOrigin("*")
 public class CartsController {
     private final CartService cartService;
-    private final ProductsService productsService;
 
     @GetMapping("/{uuid}")
     public Cart getCart(@RequestHeader(required = false) String username, @PathVariable String uuid) {

@@ -1,11 +1,10 @@
-package com.geekbrains.isemenov.spring.web.core.dto;
+package com.geekbrains.isemenov.spring.web.cart.dto;
 
 import lombok.Data;
-import com.geekbrains.isemenov.spring.web.core.entities.Product;
+
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+
 
 @Data
 public class Cart {

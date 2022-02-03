@@ -27,8 +27,8 @@ public class OrdersController {
     }
 
     @GetMapping
-    public List<OrderDto> getCurrentUserOrders(Principal principal){
-        return orderService.findOrdersByUsername(principal.getName()).stream()
+    public List<OrderDto> getCurrentUserOrders(@RequestHeader String username){
+        return orderService.findOrdersByUsername(username).stream()
                 .map(orderConverter :: entityToDto)
                 .collect(Collectors.toList());
     }

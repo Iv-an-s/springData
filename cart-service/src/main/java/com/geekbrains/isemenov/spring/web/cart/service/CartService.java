@@ -1,13 +1,13 @@
-package com.geekbrains.isemenov.spring.web.core.services;
+package com.geekbrains.isemenov.spring.web.cart.service;
 
 
 import com.geekbrains.isemenov.spring.web.api.exceptions.ResourceNotFoundException;
+import com.geekbrains.isemenov.spring.web.cart.dto.Cart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import com.geekbrains.isemenov.spring.web.core.dto.Cart;
-import com.geekbrains.isemenov.spring.web.core.entities.Product;
+
 
 import java.util.UUID;
 import java.util.function.Consumer;
