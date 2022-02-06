@@ -1,30 +1,33 @@
-package com.geekbrains.isemenov.spring.web.cart.dto;
+package com.geekbrains.isemenov.spring.web.cart.models;
 
+import com.geekbrains.isemenov.spring.web.api.core.ProductDto;
 import lombok.Data;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 @Data
 public class Cart {
-    private List<OrderItemDto> items;
+    private List<CartItem> items;
     private int totalPrice;
 
     public Cart() {
         this.items = new ArrayList<>();
     }
 
-    public void add(Product product) {
-        if (add(product.getId())) {
+    public void add(ProductDto productDto) {
+        if (add(productDto.getId())) {
             return;
         }
-        items.add(new OrderItemDto(product));
+        items.add(new CartItem(productDto));
         recalculate();
     }
 
     public boolean add(Long id) {
-        for (OrderItemDto o : items) {
+        for (CartItem o : items) {
             if (o.getProductId().equals(id)) {
                 o.changeQuantity(1);
                 recalculate();
@@ -35,9 +38,9 @@ public class Cart {
     }
 
     public void decrement(Long productId) {
-        Iterator<OrderItemDto> iter = items.iterator();
+        Iterator<CartItem> iter = items.iterator();
         while (iter.hasNext()) {
-            OrderItemDto o = iter.next();
+            CartItem o = iter.next();
             if (o.getProductId().equals(productId)) {
                 o.changeQuantity(-1);
                 if (o.getQuantity() <= 0) {
@@ -61,15 +64,15 @@ public class Cart {
 
     private void recalculate() {
         totalPrice = 0;
-        for (OrderItemDto o : items) {
+        for (CartItem o : items) {
             totalPrice += o.getPrice();
         }
     }
 
     public void merge(Cart another) {
-        for (OrderItemDto anotherItem : another.items) {
+        for (CartItem anotherItem : another.items) {
             boolean merged = false;
-            for (OrderItemDto myItem : items) {
+            for (CartItem myItem : items) {
                 if (myItem.getProductId().equals(anotherItem.getProductId())) {
                     myItem.changeQuantity(anotherItem.getQuantity());
                     merged = true;

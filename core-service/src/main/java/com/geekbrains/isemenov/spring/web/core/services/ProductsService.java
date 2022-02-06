@@ -1,16 +1,15 @@
 package com.geekbrains.isemenov.spring.web.core.services;
 
+import com.geekbrains.isemenov.spring.web.api.core.ProductDto;
 import com.geekbrains.isemenov.spring.web.api.exceptions.ResourceNotFoundException;
+import com.geekbrains.isemenov.spring.web.core.entities.Product;
+import com.geekbrains.isemenov.spring.web.core.repositories.ProductsRepository;
+import com.geekbrains.isemenov.spring.web.core.repositories.specifications.ProductsSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import com.geekbrains.isemenov.spring.web.core.dto.CategoryDto;
-import com.geekbrains.isemenov.spring.web.core.dto.ProductDto;
-import com.geekbrains.isemenov.spring.web.core.entities.Product;
-import com.geekbrains.isemenov.spring.web.core.repositories.ProductsRepository;
-import com.geekbrains.isemenov.spring.web.core.repositories.specifications.ProductsSpecifications;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -21,7 +20,7 @@ import java.util.Optional;
 public class ProductsService {
     private final ProductsRepository productsRepository;
 
-    public Page<Product> findAll(Integer minPrice, Integer maxPrice, String titlePart, CategoryDto category, Integer page) {
+    public Page<Product> findAll(Integer minPrice, Integer maxPrice, String titlePart, Integer page) {
         Specification<Product> spec = Specification.where(null);
         if (minPrice != null) {
             spec = spec.and(ProductsSpecifications.priceGreaterOrEqualsThan(minPrice));
@@ -32,14 +31,10 @@ public class ProductsService {
         if (titlePart != null) {
             spec = spec.and(ProductsSpecifications.titleLike(titlePart));
         }
-        if (category != null) {
-            spec = spec.and(ProductsSpecifications.categoryTitleIs(category.getTitle()));
-        }
-
         return productsRepository.findAll(spec, PageRequest.of(page - 1, 5));
     }
 
-    public List<Product> findAllBy(){
+    public List<Product> findAllBy() {
         return productsRepository.findAllBy();
     }
 
@@ -68,10 +63,10 @@ public class ProductsService {
     @Transactional
     public Product update(ProductDto productDto) {
         Product product = productsRepository.findById(productDto.getId()).orElseThrow(() -> new ResourceNotFoundException("Невозможно обновить  продукт, не найден в базе, id: " + productDto.getId()));
-        if (productDto.getTitle() != null){
+        if (productDto.getTitle() != null) {
             product.setTitle(productDto.getTitle());
         }
-        if (productDto.getPrice() != null){
+        if (productDto.getPrice() != null) {
             product.setPrice(productDto.getPrice());
         }
         return product;

@@ -8,7 +8,7 @@
     <groupId>com.geekbrains.isemenov</groupId>
     <artifactId>api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
+    <name>api</name>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>

@@ -1,12 +1,8 @@
 package com.geekbrains.isemenov.spring.web.core.converters;
 
+import com.geekbrains.isemenov.spring.web.api.core.OrderItemDto;
 import org.springframework.stereotype.Component;
-import com.geekbrains.isemenov.spring.web.core.dto.OrderDto;
-import com.geekbrains.isemenov.spring.web.core.dto.OrderItemDto;
-import com.geekbrains.isemenov.spring.web.core.dto.ProductDto;
-import com.geekbrains.isemenov.spring.web.core.entities.Order;
 import com.geekbrains.isemenov.spring.web.core.entities.OrderItem;
-import com.geekbrains.isemenov.spring.web.core.entities.Product;
 
 @Component
 public class OrderItemConverter {

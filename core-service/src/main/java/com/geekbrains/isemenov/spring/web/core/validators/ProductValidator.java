@@ -1,7 +1,7 @@
 package com.geekbrains.isemenov.spring.web.core.validators;
 
 import org.springframework.stereotype.Component;
-import com.geekbrains.isemenov.spring.web.core.dto.ProductDto;
+import com.geekbrains.isemenov.spring.web.api.core.ProductDto;
 import com.geekbrains.isemenov.spring.web.core.exceptions.ValidationException;
 
 import java.util.ArrayList;

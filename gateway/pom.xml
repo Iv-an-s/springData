@@ -11,10 +11,10 @@
         <relativePath/>
     </parent>
 
-    <groupId>spring-web</groupId>
+    <groupId>com.geekbrains.isemenov</groupId>
     <artifactId>gateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
+    <name>gateway</name>
 
     <properties>
         <java.version>11</java.version>

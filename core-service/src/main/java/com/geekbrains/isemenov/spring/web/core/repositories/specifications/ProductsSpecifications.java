@@ -1,7 +1,7 @@
 package com.geekbrains.isemenov.spring.web.core.repositories.specifications;
 
-import org.springframework.data.jpa.domain.Specification;
 import com.geekbrains.isemenov.spring.web.core.entities.Product;
+import org.springframework.data.jpa.domain.Specification;
 
 public class ProductsSpecifications {
 
@@ -16,9 +16,4 @@ public class ProductsSpecifications {
     public static Specification<Product> titleLike(String titlePart) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), String.format("%%%s%%", titlePart));
     }
-
-    public static Specification<Product> categoryTitleIs(String title) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("category").get("title"), title);
-    }
-
 }

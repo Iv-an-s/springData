@@ -5,8 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import com.geekbrains.isemenov.spring.web.core.converters.ProductConverter;
-import com.geekbrains.isemenov.spring.web.core.dto.CategoryDto;
-import com.geekbrains.isemenov.spring.web.core.dto.ProductDto;
+import com.geekbrains.isemenov.spring.web.api.core.ProductDto;
 import com.geekbrains.isemenov.spring.web.core.entities.Product;
 import com.geekbrains.isemenov.spring.web.core.services.ProductsService;
 import com.geekbrains.isemenov.spring.web.core.validators.ProductValidator;
@@ -24,13 +23,12 @@ public class ProductsController {
             @RequestParam(name = "p", defaultValue = "1") Integer page,
             @RequestParam(name = "min_price", required = false) Integer minPrice,
             @RequestParam(name = "max_price", required = false) Integer maxPrice,
-            @RequestParam(name = "title_part", required = false) String titlePart,
-            @RequestParam(name = "category", required = false) CategoryDto category
+            @RequestParam(name = "title_part", required = false) String titlePart
     ) {
         if (page < 1) {
             page = 1;
         }
-        return productsService.findAll(minPrice, maxPrice, titlePart, category, page).map(
+        return productsService.findAll(minPrice, maxPrice, titlePart, page).map(
                 p -> productConverter.entityToDto(p));
     }
 

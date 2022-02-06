@@ -2,10 +2,8 @@ package com.geekbrains.isemenov.spring.web.core.converters;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import com.geekbrains.isemenov.spring.web.core.dto.OrderDto;
-import com.geekbrains.isemenov.spring.web.core.dto.OrderItemDto;
+import com.geekbrains.isemenov.spring.web.api.core.OrderDto;
 import com.geekbrains.isemenov.spring.web.core.entities.Order;
-import com.geekbrains.isemenov.spring.web.core.entities.OrderItem;
 
 import java.util.stream.Collectors;
 

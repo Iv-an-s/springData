@@ -1,8 +1,10 @@
-package com.geekbrains.isemenov.spring.web.cart.service;
+package com.geekbrains.isemenov.spring.web.cart.services;
 
 
+import com.geekbrains.isemenov.spring.web.api.core.ProductDto;
 import com.geekbrains.isemenov.spring.web.api.exceptions.ResourceNotFoundException;
-import com.geekbrains.isemenov.spring.web.cart.dto.Cart;
+import com.geekbrains.isemenov.spring.web.cart.integrations.ProductsServiceIntegration;
+import com.geekbrains.isemenov.spring.web.cart.models.Cart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,7 +17,7 @@ import java.util.function.Consumer;
 @Service
 @RequiredArgsConstructor
 public class CartService {
-    private final ProductsService productsService;
+    private final ProductsServiceIntegration productsServiceIntegration;
     private final RedisTemplate<String, Object> redisTemplate;
 
     @Value("${utils.cart.prefix}")
@@ -43,9 +45,9 @@ public class CartService {
         // GET from REDIS
         // UPDATE OBJECT
         // SET TO REDIS
-        Product product = productsService.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Невозможно добавить продукт в корзину. Продукт не найдет, id: " + productId));
+        ProductDto productDto = productsServiceIntegration.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Невозможно добавить продукт в корзину. Продукт не найдет, id: " + productId));
         execute(cartKey, c -> {
-            c.add(product);
+            c.add(productDto);
         });
     }
 

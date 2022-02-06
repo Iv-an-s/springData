@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.geekbrains.isemenov.spring.web.core.converters.OrderConverter;
-import com.geekbrains.isemenov.spring.web.core.dto.OrderDetailsDto;
-import com.geekbrains.isemenov.spring.web.core.dto.OrderDto;
+import com.geekbrains.isemenov.spring.web.api.core.OrderDetailsDto;
+import com.geekbrains.isemenov.spring.web.api.core.OrderDto;
 import com.geekbrains.isemenov.spring.web.core.services.OrderService;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -1,22 +1,23 @@
-package com.geekbrains.isemenov.spring.web.cart.controller;
+package com.geekbrains.isemenov.spring.web.cart.controllers;
 
 
+import com.geekbrains.isemenov.spring.web.api.carts.CartDto;
 import com.geekbrains.isemenov.spring.web.api.dto.StringResponse;
-import com.geekbrains.isemenov.spring.web.cart.dto.Cart;
-import com.geekbrains.isemenov.spring.web.cart.service.CartService;
+import com.geekbrains.isemenov.spring.web.cart.converters.CartConverter;
+import com.geekbrains.isemenov.spring.web.cart.services.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/cart")
 @RequiredArgsConstructor
-//@CrossOrigin("*")
 public class CartsController {
     private final CartService cartService;
+    private final CartConverter cartConverter;
 
     @GetMapping("/{uuid}")
-    public Cart getCart(@RequestHeader(required = false) String username, @PathVariable String uuid) {
-       return cartService.getCurrentCart(getCurrentCartUuid(username, uuid));
+    public CartDto getCart(@RequestHeader(required = false) String username, @PathVariable String uuid) {
+        return cartConverter.modelToDto(cartService.getCurrentCart(getCurrentCartUuid(username, uuid)));
 // метод, когда запрашивает текущую корзину требует имя корзины, которым может быть username, или uuid
     }
 
