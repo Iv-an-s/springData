@@ -1,15 +1,15 @@
 package com.geekbrains.isemenov.spring.web.cart;
 
 import com.geekbrains.isemenov.spring.web.api.core.ProductDto;
-import com.geekbrains.isemenov.spring.web.cart.integrations.ProductsServiceIntegration;
 import com.geekbrains.isemenov.spring.web.cart.services.CartService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest
@@ -25,18 +25,18 @@ public class CartServiceTest {
     private static ProductDto productDtoMilk;
 
     @BeforeAll
-    public static void initProducts(){
-        productDtoBread = new ProductDto(1L, "Bread", 50 );
+    public static void initProducts() {
+        productDtoBread = new ProductDto(1L, "Bread", 50);
         productDtoMilk = new ProductDto(2L, "Milk", 100);
     }
 
     @BeforeEach
-    public void initCart(){
+    public void initCart() {
         cartService.clearCart("test_cart");
     }
 
     @Test
-    public void addToCartTest(){
+    public void addToCartTest() {
         Mockito.doReturn(productDtoBread).when(restTemplate).getForObject("http://localhost:5555/core/api/v1/products/" + productDtoBread.getId(), ProductDto.class);
         Mockito.doReturn(productDtoMilk).when(restTemplate).getForObject("http://localhost:5555/core/api/v1/products/" + productDtoMilk.getId(), ProductDto.class);
         cartService.addToCart("test_cart", productDtoBread.getId());
@@ -51,7 +51,7 @@ public class CartServiceTest {
     }
 
     @Test
-    public void clearCartTest(){
+    public void clearCartTest() {
         Mockito.doReturn(productDtoBread).when(restTemplate).getForObject("http://localhost:5555/core/api/v1/products/" + productDtoBread.getId(), ProductDto.class);
         Mockito.doReturn(productDtoMilk).when(restTemplate).getForObject("http://localhost:5555/core/api/v1/products/" + productDtoMilk.getId(), ProductDto.class);
         cartService.addToCart("test_cart", productDtoBread.getId());
@@ -62,7 +62,7 @@ public class CartServiceTest {
     }
 
     @Test
-    public void removeItemFromCartTest(){
+    public void removeItemFromCartTest() {
         Mockito.doReturn(productDtoBread).when(restTemplate).getForObject("http://localhost:5555/core/api/v1/products/" + productDtoBread.getId(), ProductDto.class);
         Mockito.doReturn(productDtoMilk).when(restTemplate).getForObject("http://localhost:5555/core/api/v1/products/" + productDtoMilk.getId(), ProductDto.class);
         cartService.addToCart("test_cart", productDtoBread.getId());
@@ -75,7 +75,7 @@ public class CartServiceTest {
     }
 
     @Test
-    public void decrementItemTest(){
+    public void decrementItemTest() {
         Mockito.doReturn(productDtoBread).when(restTemplate).getForObject("http://localhost:5555/core/api/v1/products/" + productDtoBread.getId(), ProductDto.class);
         cartService.addToCart("test_cart", productDtoBread.getId());
         cartService.addToCart("test_cart", productDtoBread.getId());
@@ -86,7 +86,7 @@ public class CartServiceTest {
     }
 
     @Test
-    public void mergeTest(){
+    public void mergeTest() {
         cartService.clearCart("user_cart");
         Mockito.doReturn(productDtoBread).when(restTemplate).getForObject("http://localhost:5555/core/api/v1/products/" + productDtoBread.getId(), ProductDto.class);
         Mockito.doReturn(productDtoMilk).when(restTemplate).getForObject("http://localhost:5555/core/api/v1/products/" + productDtoMilk.getId(), ProductDto.class);
