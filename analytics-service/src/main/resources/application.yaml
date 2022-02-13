@@ -1,0 +1,7 @@
+server:
+  port: 8190
+  servlet:
+    context-path: /web-market-analytics
+utils:
+  cart:
+    prefix: SPRING_WEB_APP_

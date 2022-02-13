@@ -23,6 +23,10 @@
                 templateUrl: 'cart/cart.html',
                 controller: 'cartController'
             })
+            .when('/analytics', {
+                templateUrl: 'analytics/analytics.html',
+                controller: 'analyticsController'
+            })
             .otherwise({
                 redirectTo: '/'
             });

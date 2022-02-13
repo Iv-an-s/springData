@@ -1,0 +1,45 @@
+<div>
+    <p></p>
+    <h2>Аналитика</h2>
+
+    <p></p>
+    <h3>Самые популярные продукты за месяц</h3>
+    <table class="table table-hover">
+        <tr>
+            <td>Рейтинг</td>
+            <td>Название продукта</td>
+            <td>Количество покупок</td>
+        </tr>
+        <tbody>
+        <tr ng-repeat="item in TopMonthProducts">
+            <td>{{item.id}}</td>
+            <td>{{item.title}}</td>
+            <td>{{item.quantity}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <p>
+        <button class="btn btn-secondary" ng-click="updateStatistics()">Обновить статистику</button>
+    </p>
+
+    <p></p>
+    <h3>Товары дня</h3>
+    <table class="table table-hover">
+        <tr>
+            <td>Рейтинг</td>
+            <td>Название продукта</td>
+            <td>Количество покупок</td>
+        </tr>
+        <tbody>
+        <tr ng-repeat="item in TopDayProducts">
+            <td>{{item.id}}</td>
+            <td>{{item.title}}</td>
+            <td>{{item.quantity}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <p>
+        <button class="btn btn-secondary" ng-click="updateStatistics()">Обновить статистику</button>
+    </p>
+
+</div>

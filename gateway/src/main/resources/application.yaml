@@ -39,7 +39,14 @@ spring:
             - StripPrefix=1
             - PrefixPath=/web-market-auth
             - JwtAuthFilter
-
+        - id: analytics-service
+          uri: http://localhost:8190/
+          predicates:
+            - Path=/analytics/**
+          filters:
+            - StripPrefix=1
+            - PrefixPath=/web-market-analytics
+            - JwtAuthFilter
 jwt:
   secret: aevsggrixfnfgkrgnjfshgeilgskdfnvsjbvlkghri
 
