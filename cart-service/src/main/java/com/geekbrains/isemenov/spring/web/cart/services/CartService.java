@@ -1,6 +1,8 @@
 package com.geekbrains.isemenov.spring.web.cart.services;
 
 
+import com.geekbrains.isemenov.spring.web.api.analytics.AnalyticsDto;
+import com.geekbrains.isemenov.spring.web.api.carts.CartItemDto;
 import com.geekbrains.isemenov.spring.web.api.core.ProductDto;
 import com.geekbrains.isemenov.spring.web.api.exceptions.ResourceNotFoundException;
 import com.geekbrains.isemenov.spring.web.cart.integrations.ProductsServiceIntegration;
@@ -11,7 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 @Service
@@ -19,9 +21,36 @@ import java.util.function.Consumer;
 public class CartService {
     private final ProductsServiceIntegration productsServiceIntegration;
     private final RedisTemplate<String, Object> redisTemplate;
-
     @Value("${utils.cart.prefix}")
     private String cartPrefix;
+
+    private List<CartItemDto> productDayCounter = new ArrayList<>();
+
+    public AnalyticsDto getDailyProductsAnalytics(){
+        List<CartItemDto> productCounterCopy = new ArrayList<>();
+        productDayCounter.sort(new Comparator<CartItemDto>() {
+            @Override
+            public int compare(CartItemDto o1, CartItemDto o2) {
+                return o1.getQuantity()-o2.getQuantity();
+            }
+        });
+        if(productDayCounter.size()<=5) {
+            productCounterCopy.addAll(productDayCounter);
+        }else {
+            for (int i = 0; i < 5; i++) {
+                productCounterCopy.add(productDayCounter.get(i));
+            }
+        }
+        productDayCounter.clear();
+
+//        productCounterCopy.add(new CartItemDto(1L, "Milk", 2, 200, 400));
+//        productCounterCopy.add(new CartItemDto(2L, "Milk2", 2, 300, 400));
+//        productCounterCopy.add(new CartItemDto(3L, "Milk3", 2, 400, 400));
+//        productCounterCopy.add(new CartItemDto(4L, "Milk4", 2, 500, 400));
+//        productCounterCopy.add(new CartItemDto(5L, "Milk5", 2, 600, 400));
+
+        return new AnalyticsDto(productCounterCopy);
+    }
 
     public String getCartUuidFromSuffix(String suffix) {
         return cartPrefix + suffix;
@@ -49,6 +78,19 @@ public class CartService {
         execute(cartKey, c -> {
             c.add(productDto);
         });
+        if(!productDayCounter.isEmpty()) {
+            boolean isFounded = false;
+            for (int i = 0; i < productDayCounter.size(); i++) {
+                if (productDayCounter.get(i).getProductId().equals(productDto.getId())) {
+                    productDayCounter.get(i).setQuantity(productDayCounter.get(i).getQuantity() + 1);
+                    isFounded = true;
+                    break;
+                }
+            }
+            if(!isFounded) {
+                productDayCounter.add(new CartItemDto(productDto.getId(), productDto.getTitle(), 1, productDto.getPrice(), productDto.getPrice()));
+            }
+        }else productDayCounter.add(new CartItemDto(productDto.getId(), productDto.getTitle(), 1, productDto.getPrice(), productDto.getPrice()));
     }
 
     public void clearCart(String cartKey) {

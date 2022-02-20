@@ -1,5 +1,6 @@
 package com.geekbrains.isemenov.spring.web.core.controllers;
 
+import com.geekbrains.isemenov.spring.web.api.analytics.AnalyticsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -30,5 +31,10 @@ public class OrdersController {
         return orderService.findOrdersByUsername(username).stream()
                 .map(orderConverter :: entityToDto)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/analytics")
+    public AnalyticsDto getMonthProductsAnalytics() {
+        return orderService.getMonthProductsAnalytics();
     }
 }

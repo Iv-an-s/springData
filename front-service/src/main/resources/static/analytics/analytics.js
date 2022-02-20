@@ -45,8 +45,9 @@ angular.module('market-front').controller('analyticsController', function ($scop
     };
 
     $scope.runAnalise = function(){
-        setInterval(function(){$scope.loadTopMonthProducts(); $scope.loadTopDayProducts()}, 30000);
+        setInterval(function(){$scope.loadTopMonthProducts(); $scope.loadTopDayProducts()}, 60000);
     };
 
+    $scope.updateStatistics();
     $scope.runAnalise();
 });

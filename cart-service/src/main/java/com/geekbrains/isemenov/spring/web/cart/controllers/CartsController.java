@@ -1,12 +1,18 @@
 package com.geekbrains.isemenov.spring.web.cart.controllers;
 
 
+import com.geekbrains.isemenov.spring.web.api.analytics.AnalyticsDto;
 import com.geekbrains.isemenov.spring.web.api.carts.CartDto;
+import com.geekbrains.isemenov.spring.web.api.carts.CartItemDto;
+import com.geekbrains.isemenov.spring.web.api.core.ProductDto;
 import com.geekbrains.isemenov.spring.web.api.dto.StringResponse;
 import com.geekbrains.isemenov.spring.web.cart.converters.CartConverter;
 import com.geekbrains.isemenov.spring.web.cart.services.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/cart")
@@ -14,6 +20,11 @@ import org.springframework.web.bind.annotation.*;
 public class CartsController {
     private final CartService cartService;
     private final CartConverter cartConverter;
+
+    @GetMapping("/analytics/day")
+    public AnalyticsDto getDailyProductsAnalytics() {
+        return cartService.getDailyProductsAnalytics();
+    }
 
     @GetMapping("/{uuid}")
     public CartDto getCart(@RequestHeader(required = false) String username, @PathVariable String uuid) {
