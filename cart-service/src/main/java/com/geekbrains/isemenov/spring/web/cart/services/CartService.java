@@ -4,19 +4,18 @@ package com.geekbrains.isemenov.spring.web.cart.services;
 import com.geekbrains.isemenov.spring.web.api.analytics.AnalyticsDto;
 import com.geekbrains.isemenov.spring.web.api.carts.CartItemDto;
 import com.geekbrains.isemenov.spring.web.api.core.ProductDto;
-import com.geekbrains.isemenov.spring.web.api.exceptions.AppError;
 import com.geekbrains.isemenov.spring.web.api.exceptions.ResourceNotFoundException;
 import com.geekbrains.isemenov.spring.web.cart.integrations.ProductsServiceIntegration;
 import com.geekbrains.isemenov.spring.web.cart.models.Cart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 @Service
@@ -29,17 +28,17 @@ public class CartService {
 
     private List<CartItemDto> productDayCounter = new ArrayList<>();
 
-    public AnalyticsDto getDailyProductsAnalytics(){
+    public AnalyticsDto getDailyProductsAnalytics() {
         List<CartItemDto> productCounterCopy = new ArrayList<>();
         productDayCounter.sort(new Comparator<CartItemDto>() {
             @Override
             public int compare(CartItemDto o1, CartItemDto o2) {
-                return o1.getQuantity()-o2.getQuantity();
+                return o1.getQuantity() - o2.getQuantity();
             }
         });
-        if(productDayCounter.size()<=5) {
+        if (productDayCounter.size() <= 5) {
             productCounterCopy.addAll(productDayCounter);
-        }else {
+        } else {
             for (int i = 0; i < 5; i++) {
                 productCounterCopy.add(productDayCounter.get(i));
             }
@@ -78,15 +77,16 @@ public class CartService {
         // UPDATE OBJECT
         // SET TO REDIS
         ProductDto productDto;
-        if (productId.equals(5L)){
+        // тестовый выброс исключения
+        if (productId.equals(5L)) {
             throw new ResourceNotFoundException("Невозможно добавить продукт в корзину. Продукт не найден, id: ");
-        }else {
+        } else {
             productDto = productsServiceIntegration.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Невозможно добавить продукт в корзину. Продукт не найден, id: " + productId));
         }
         execute(cartKey, c -> {
             c.add(productDto);
         });
-        if(!productDayCounter.isEmpty()) {
+        if (!productDayCounter.isEmpty()) {
             boolean isFounded = false;
             for (int i = 0; i < productDayCounter.size(); i++) {
                 if (productDayCounter.get(i).getProductId().equals(productDto.getId())) {
@@ -95,10 +95,11 @@ public class CartService {
                     break;
                 }
             }
-            if(!isFounded) {
+            if (!isFounded) {
                 productDayCounter.add(new CartItemDto(productDto.getId(), productDto.getTitle(), 1, productDto.getPrice(), productDto.getPrice()));
             }
-        }else productDayCounter.add(new CartItemDto(productDto.getId(), productDto.getTitle(), 1, productDto.getPrice(), productDto.getPrice()));
+        } else
+            productDayCounter.add(new CartItemDto(productDto.getId(), productDto.getTitle(), 1, productDto.getPrice(), productDto.getPrice()));
     }
 
     public void clearCart(String cartKey) {
