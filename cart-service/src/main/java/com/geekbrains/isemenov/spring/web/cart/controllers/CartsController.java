@@ -9,6 +9,8 @@ import com.geekbrains.isemenov.spring.web.api.dto.StringResponse;
 import com.geekbrains.isemenov.spring.web.cart.converters.CartConverter;
 import com.geekbrains.isemenov.spring.web.cart.services.CartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,8 +40,9 @@ public class CartsController {
     }
 
     @GetMapping("/{uuid}/add/{productId}")
-    public void add(@RequestHeader(required = false) String username, @PathVariable String uuid, @PathVariable Long productId) {
+    public ResponseEntity<?> add(@RequestHeader(required = false) String username, @PathVariable String uuid, @PathVariable Long productId) {
         cartService.addToCart(getCurrentCartUuid(username, uuid), productId);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/{uuid}/decrement/{productId}")

@@ -1,6 +1,7 @@
 package com.geekbrains.isemenov.spring.web.cart.exceptions;
 
 import com.geekbrains.isemenov.spring.web.api.exceptions.AppError;
+import com.geekbrains.isemenov.spring.web.api.exceptions.NoConnectionWithServiceException;
 import com.geekbrains.isemenov.spring.web.api.exceptions.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,5 +16,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<AppError> catchResourceNotFoundException(ResourceNotFoundException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
+    }
+    public ResponseEntity<AppError> catchNoConnectionWithServiceException(NoConnectionWithServiceException e){
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
