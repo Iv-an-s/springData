@@ -4,6 +4,7 @@ package com.geekbrains.isemenov.spring.web.cart.controllers;
 import com.geekbrains.isemenov.spring.web.api.analytics.AnalyticsDto;
 import com.geekbrains.isemenov.spring.web.api.carts.CartDto;
 import com.geekbrains.isemenov.spring.web.api.dto.StringResponse;
+import com.geekbrains.isemenov.spring.web.api.exceptions.CartIsBrokenException;
 import com.geekbrains.isemenov.spring.web.cart.converters.CartConverter;
 import com.geekbrains.isemenov.spring.web.cart.services.CartService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,9 @@ public class CartsController {
 
     @GetMapping("/{uuid}")
     public CartDto getCart(@RequestHeader(required = false) String username, @PathVariable String uuid) {
+        if(10<20){
+            throw new CartIsBrokenException("Корзина сломана");
+        }
         return cartConverter.modelToDto(cartService.getCurrentCart(getCurrentCartUuid(username, uuid)));
 // метод, когда запрашивает текущую корзину требует имя корзины, которым может быть username, или uuid
     }
