@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
+
 @SpringBootTest
 //@ActiveProfiles("test")
 public class CartServiceTest {
@@ -26,8 +28,8 @@ public class CartServiceTest {
 
     @BeforeAll
     public static void initProducts() {
-        productDtoBread = new ProductDto(1L, "Bread", 50);
-        productDtoMilk = new ProductDto(2L, "Milk", 100);
+        productDtoBread = new ProductDto(1L, "Bread", BigDecimal.valueOf(50));
+        productDtoMilk = new ProductDto(2L, "Milk", BigDecimal.valueOf(100));
     }
 
     @BeforeEach
@@ -93,13 +95,13 @@ public class CartServiceTest {
         cartService.addToCart("user_cart", productDtoBread.getId());
         cartService.addToCart("user_cart", productDtoBread.getId());
         Assertions.assertEquals(1, cartService.getCurrentCart("user_cart").getItems().size());
-        Assertions.assertEquals(100, cartService.getCurrentCart("user_cart").getItems().stream().mapToInt(p -> p.getPrice()).sum());
+        Assertions.assertEquals(100*100, cartService.getCurrentCart("user_cart").getItems().stream().mapToInt(p -> p.getPrice().multiply(BigDecimal.valueOf(100)).intValue()).sum());
         cartService.addToCart("test_cart", productDtoMilk.getId());
         cartService.addToCart("test_cart", productDtoBread.getId());
         Assertions.assertEquals(2, cartService.getCurrentCart("test_cart").getItems().size());
-        Assertions.assertEquals(150, cartService.getCurrentCart("test_cart").getItems().stream().mapToInt(p -> p.getPrice()).sum());
+        Assertions.assertEquals(150*100, cartService.getCurrentCart("test_cart").getItems().stream().mapToInt(p -> p.getPrice().multiply(BigDecimal.valueOf(100)).intValue()).sum());
         cartService.merge("user_cart", "test_cart");
         Assertions.assertEquals(2, cartService.getCurrentCart("user_cart").getItems().size());
-        Assertions.assertEquals(250, cartService.getCurrentCart("user_cart").getItems().stream().mapToInt(p -> p.getPrice()).sum());
+        Assertions.assertEquals(250*100, cartService.getCurrentCart("user_cart").getItems().stream().mapToInt(p -> p.getPrice().multiply(BigDecimal.valueOf(100)).intValue()).sum());
     }
 }
