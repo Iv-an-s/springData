@@ -1,5 +1,8 @@
 package com.geekbrains.isemenov.spring.web.api.exceptions;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Модель ошибки")
 public class AppError {
     private String code;
     private String message;

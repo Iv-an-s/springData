@@ -1,6 +1,7 @@
 package com.geekbrains.isemenov.spring.web.core.configs;
 
 import com.geekbrains.isemenov.spring.web.core.properties.CartServiceIntegrationProperties;
+import com.geekbrains.isemenov.spring.web.core.properties.TimeoutsProperties;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableConfigurationProperties(
-        CartServiceIntegrationProperties.class
+        {CartServiceIntegrationProperties.class, TimeoutsProperties.class}
 )
 @RequiredArgsConstructor
 public class AppConfig {
@@ -36,10 +37,10 @@ public class AppConfig {
 //  Конфигурация подключения:
         TcpClient tcpClient = TcpClient
                 .create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, cartServiceIntegrationProperties.getConnectTimeout())
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, cartServiceIntegrationProperties.getTimeoutsProperties().getConnectTimeout())
                 .doOnConnected(connection -> {
-                    connection.addHandlerLast(new ReadTimeoutHandler(cartServiceIntegrationProperties.getReadTimeout(), TimeUnit.MILLISECONDS));
-                    connection.addHandlerLast(new WriteTimeoutHandler(cartServiceIntegrationProperties.getWriteTimeout(), TimeUnit.MILLISECONDS));
+                    connection.addHandlerLast(new ReadTimeoutHandler(cartServiceIntegrationProperties.getTimeoutsProperties().getReadTimeout(), TimeUnit.MILLISECONDS));
+                    connection.addHandlerLast(new WriteTimeoutHandler(cartServiceIntegrationProperties.getTimeoutsProperties().getWriteTimeout(), TimeUnit.MILLISECONDS));
                 });
 //  Собираем сам WebClient. Передаем ему путь, по которому он будет "стучаться".
         return WebClient
