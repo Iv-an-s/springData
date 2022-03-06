@@ -1,6 +1,7 @@
 package com.geekbrains.isemenov.spring.web.core.controllers;
 
 import com.geekbrains.isemenov.spring.web.api.analytics.AnalyticsDto;
+import com.geekbrains.isemenov.spring.web.api.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +37,10 @@ public class OrdersController {
     @GetMapping("/analytics")
     public AnalyticsDto getMonthProductsAnalytics() {
         return orderService.getMonthProductsAnalytics();
+    }
+
+    @GetMapping("/{id}")
+    public OrderDto getOrderById(@PathVariable Long id) {
+        return orderConverter.entityToDto(orderService.findById(id).orElseThrow(() -> new ResourceNotFoundException("ORDER 404")));
     }
 }

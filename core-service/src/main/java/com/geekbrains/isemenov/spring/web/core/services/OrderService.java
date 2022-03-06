@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,5 +70,9 @@ public class OrderService {
 
     public List<Order> findOrdersByUsername(String username) {
         return ordersRepository.findAllByUsername(username);
+    }
+
+    public Optional<Order> findById(Long orderId) {
+        return ordersRepository.findById(orderId);
     }
 }
