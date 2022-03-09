@@ -18,8 +18,10 @@ create table orders (
     id                      bigserial primary key,
     username                varchar(255) not null,
     total_price             numeric(8, 2) not null,
+    city                    varchar(255),
     address                 varchar(255),
     phone                   varchar(255),
+    status                  varchar(255),
     created_at              timestamp default current_timestamp,
     updated_at              timestamp default current_timestamp
 );
@@ -74,8 +76,8 @@ insert into products (title, price) values
     ('banana', 190.00),
     ('plum', 200.00);
 
-insert into orders (username, total_price, address, phone) values
-('bob', 200.00, 'address', '12345');
+insert into orders (username, total_price, city, address, phone) values
+('bob', 200.00, 'Moscow', 'Red Square 1', '+7(495)000-00-01');
 
 insert into order_items (product_id, order_id, quantity, price_per_product, price) values
 (1, 1, 2, 100.00, 200.00);

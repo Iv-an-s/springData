@@ -1,8 +1,17 @@
 package com.geekbrains.isemenov.spring.web.api.core;
 
 public class OrderDetailsDto {
+    private String city;
     private String address;
     private String phone;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     public String getAddress() {
         return address;
@@ -23,7 +32,8 @@ public class OrderDetailsDto {
     public OrderDetailsDto() {
     }
 
-    public OrderDetailsDto(String address, String phone) {
+    public OrderDetailsDto(String city, String address, String phone) {
+        this.city = city;
         this.address = address;
         this.phone = phone;
     }

@@ -45,8 +45,10 @@ public class OrderService {
     public void createOrder(String username, OrderDetailsDto orderDetailsDto) {
         CartDto currentCart = cartServiceIntegration.getUserCart(username);
         Order order = new Order();
+        order.setCity(orderDetailsDto.getCity());
         order.setAddress(orderDetailsDto.getAddress());
         order.setPhone(orderDetailsDto.getPhone());
+        order.setStatus(Order.Status.ORDER_CREATED);
         order.setUsername(username);
         order.setTotalPrice(currentCart.getTotalPrice());
 
@@ -66,6 +68,10 @@ public class OrderService {
         for (int i = 0; i < items.size(); i++) {
             productMonthCounter.add(orderItemConverter.entityToDto(items.get(i)));
         }
+    }
+
+    public void save(Order order){
+        ordersRepository.save(order);
     }
 
     public List<Order> findOrdersByUsername(String username) {

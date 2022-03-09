@@ -8,18 +8,22 @@ public class OrderDto {
     private String username;
     private List<OrderItemDto> items;
     private BigDecimal totalPrice;
+    private String city;
     private String address;
+    private String status;
     private String phone;
 
     public OrderDto() {
     }
 
-    public OrderDto(Long id, String username, List<OrderItemDto> items, BigDecimal totalPrice, String address, String phone) {
+    public OrderDto(Long id, String username, List<OrderItemDto> items, BigDecimal totalPrice, String city, String address, String status, String phone) {
         this.id = id;
         this.username = username;
         this.items = items;
         this.totalPrice = totalPrice;
+        this.city = city;
         this.address = address;
+        this.status = status;
         this.phone = phone;
     }
 
@@ -69,5 +73,21 @@ public class OrderDto {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
