@@ -27,15 +27,17 @@ public class PayPalController {
     private final OrderService orderService;
     private final PayPalService payPalService;
 
+    //cоздаем черновик заказа
     @PostMapping("/create/{orderId}")
     public ResponseEntity<?> createOrder(@PathVariable Long orderId) throws IOException {
-        OrdersCreateRequest request = new OrdersCreateRequest();
-        request.prefer("return=representation");
-        request.requestBody(payPalService.createOrderRequest(orderId));
+        OrdersCreateRequest request = new OrdersCreateRequest(); // формируем запрос к PayPal
+        request.prefer("return=representation"); // нужно чтобы PayPal показал окошко ввода данных
+        request.requestBody(payPalService.createOrderRequest(orderId)); // в тело запроса зашиваем всю информацию о заказе
         HttpResponse<Order> response = payPalClient.execute(request);
         return new ResponseEntity<>(response.result().id(), HttpStatus.valueOf(response.statusCode()));
     }
 
+    //подтверждаем заказ
     @PostMapping("/capture/{payPalId}")
     public ResponseEntity<?> captureOrder(@PathVariable String payPalId) throws IOException {
         OrdersCaptureRequest request = new OrdersCaptureRequest(payPalId);
@@ -45,8 +47,12 @@ public class PayPalController {
         Order payPalOrder = response.result();
         if ("COMPLETED".equals(payPalOrder.status())) {
             long orderId = Long.parseLong(payPalOrder.purchaseUnits().get(0).referenceId());
-            //Optional<com.geekbrains.isemenov.spring.web.core.entities.Order> orderOptional = orderService.findById(orderId);
-
+            Optional<com.geekbrains.isemenov.spring.web.core.entities.Order> orderOptional = orderService.findById(orderId);
+            if(orderOptional.isPresent()){
+                com.geekbrains.isemenov.spring.web.core.entities.Order order = orderOptional.get();
+                order.setStatus(com.geekbrains.isemenov.spring.web.core.entities.Order.Status.ORDER_IS_PAID);
+                orderService.save(order);
+            }
             return new ResponseEntity<>("Order completed!", HttpStatus.valueOf(response.statusCode()));
         }
         return new ResponseEntity<>(payPalOrder, HttpStatus.valueOf(response.statusCode()));

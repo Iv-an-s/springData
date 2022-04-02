@@ -28,6 +28,11 @@
     <h3>Детали заказа</h3>
     <form novalidate>
         <div class="form-floating input-group-sm">
+            <input class="form-control" type="text" id="cityField" placeholder="Город доставки" ng-model="orderDetails.city">
+            <label for="cityField">Город</label>
+        </div>
+        <p></p>
+        <div class="form-floating input-group-sm">
             <input class="form-control" type="text" id="addressField" placeholder="Адрес доставки" ng-model="orderDetails.address">
             <label for="addressField">Адрес</label>
         </div>

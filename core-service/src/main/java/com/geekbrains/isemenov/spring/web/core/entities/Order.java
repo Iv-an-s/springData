@@ -13,6 +13,10 @@ import java.util.List;
 @Data
 @Table(name = "orders")
 public class Order {
+    public enum Status{
+        ORDER_CREATED, ORDER_IS_PAID, ORDER_CANCELLED;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -27,11 +31,17 @@ public class Order {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
+    @Column(name = "city")
+    private String city;
+
     @Column(name = "address")
     private String address;
 
     @Column(name = "phone")
     private String phone;
+
+    @Column(name = "status")
+    private Status status;
 
     @CreationTimestamp
     @Column(name = "created_at")
