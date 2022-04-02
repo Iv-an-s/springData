@@ -47,4 +47,32 @@ public class ProductDto {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
+    public static ProductDtoBuilder newProductDtoBuilder() {
+        return new ProductDto().new ProductDtoBuilder();
+    }
+
+    public class ProductDtoBuilder{
+        private ProductDtoBuilder(){
+        }
+
+        public ProductDtoBuilder setProductDtoId(Long id){
+            ProductDto.this.setId(id);
+            return this;
+        }
+
+        public ProductDtoBuilder setProductDtoTitle(String title){
+            ProductDto.this.setTitle(title);
+            return this;
+        }
+
+        public ProductDtoBuilder setProductDtoPrice(BigDecimal price){
+            ProductDto.this.setPrice(price);
+            return this;
+        }
+
+        public ProductDto build(){
+            return ProductDto.this;
+        }
+    }
 }
