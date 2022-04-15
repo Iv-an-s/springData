@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService {
+public class OrderService implements OrderServisable{
     private final CartServiceIntegration cartServiceIntegration;
     private final OrdersRepository ordersRepository;
     private final ProductsService productsService;
