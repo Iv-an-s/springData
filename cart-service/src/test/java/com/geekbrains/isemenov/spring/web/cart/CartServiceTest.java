@@ -28,8 +28,8 @@ public class CartServiceTest {
 
     @BeforeAll
     public static void initProducts() {
-        productDtoBread = new ProductDto(1L, "Bread", BigDecimal.valueOf(50));
-        productDtoMilk = new ProductDto(2L, "Milk", BigDecimal.valueOf(100));
+        productDtoBread = new ProductDto(1L, "Bread", BigDecimal.valueOf(50), "bakery_products");
+        productDtoMilk = new ProductDto(2L, "Milk", BigDecimal.valueOf(100), "dairy_products");
     }
 
     @BeforeEach

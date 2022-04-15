@@ -40,6 +40,7 @@
                     <td>Название</td>
                     <td>Цена</td>
                     <td></td>
+                    <td></td>
                 </tr>
                 <tbody>
                 <tr ng-repeat="p in ProductsPage.content">
@@ -49,17 +50,56 @@
                     <td>
                         <button class="btn btn-primary" ng-click="addToCart(p.id)">Добавить в корзину</button>
                     </td>
+                    <td>
+                        <button class="btn btn-primary" ng-click="prepareProductForUpdate(p.id)">Изменить</button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
             <p></p>
             <nav aria-label="Page navigation">
                 <ul class="pagination">
+                    <li class="page-item" ng-show="ProductsPage.number > 0">
+                        <a class="page-link" ng-click="loadProducts(0)">В начало</a>
+                    </li>
+
                     <li class="page-item" ng-repeat="pageIndex in paginationArray">
-                        <a class="page-link" ng-click="loadProducts(pageIndex)">{{pageIndex}}</a>
+                        <button ng-show="ProductsPage.number != pageIndex - 1" class="page-link" ng-click="loadProducts(pageIndex)">{{pageIndex}}</button>
+                        <button ng-show="ProductsPage.number == pageIndex -1" style="font-weight: bold;" class="page-link" ng-click="loadProducts(pageIndex)">{{pageIndex}}</button>
+                    </li>
+
+                    <li class="page-item" ng-show="ProductsPage.number < ProductsPage.totalPages - 1">
+                        <a class="page-link" ng-click="loadProducts(ProductsPage.totalPages)">В конец</a>
                     </li>
                 </ul>
             </nav>
+
+            <p></p>
+            <h3>Добавить новый продукт</h3>
+            <form novalidate ng-submit="createNewProduct()">
+                <input class="form-control" type="text" placeholder="Название" ng-model="new_product.title">
+                <p></p>
+                <input class="form-control" type="number" placeholder="Цена" ng-model="new_product.price">
+                <p></p>
+                <input class="form-control" type="text" placeholder="Название категории" ng-model="new_product.categoryTitle">
+                <p></p>
+                <button type="submit" class="btn btn-primary">Создать</button>
+            </form>
+
+            <p></p>
+            <h3>Изменить продукт</h3>
+            <form novalidate ng-submit="updateProduct()">
+                <input class="form-control" type="number" hidden placeholder="ID" ng-model="updated_product.id">
+                <p></p>
+                <input class="form-control" type="text" placeholder="Название" ng-model="updated_product.title">
+                <p></p>
+                <input class="form-control" type="number" placeholder="Цена" ng-model="updated_product.price">
+                <p></p>
+                <input class="form-control" type="text" placeholder="Название категории" ng-model="updated_product.categoryTitle">
+                <p></p>
+                <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+            </form>
+            <p></p>
         </div>
     </div>
 </div>

@@ -2,6 +2,8 @@ package com.geekbrains.isemenov.spring.web.core.services;
 
 import com.geekbrains.isemenov.spring.web.api.core.ProductDto;
 import com.geekbrains.isemenov.spring.web.api.exceptions.ResourceNotFoundException;
+import com.geekbrains.isemenov.spring.web.core.converters.ProductConverter;
+import com.geekbrains.isemenov.spring.web.core.entities.Category;
 import com.geekbrains.isemenov.spring.web.core.entities.Product;
 import com.geekbrains.isemenov.spring.web.core.repositories.ProductsRepository;
 import com.geekbrains.isemenov.spring.web.core.repositories.specifications.ProductsSpecifications;
@@ -20,8 +22,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductsService {
     private final ProductsRepository productsRepository;
+    private final ProductConverter productConverter;
+    private final CategoriesService categoriesService;
 
-    public Page<Product> findAll(Integer minPrice, Integer maxPrice, String titlePart, Integer page) {
+    public Page<Product> findAll(Integer minPrice, Integer maxPrice, String titlePart, String categoryTitlePart, Integer page) {
         Specification<Product> spec = Specification.where(null);
         if (minPrice != null) {
             spec = spec.and(ProductsSpecifications.priceGreaterOrEqualsThan(minPrice));
@@ -32,11 +36,10 @@ public class ProductsService {
         if (titlePart != null) {
             spec = spec.and(ProductsSpecifications.titleLike(titlePart));
         }
+        if (categoryTitlePart != null) {
+            spec = spec.and(ProductsSpecifications.categoryLike(categoryTitlePart));
+        }
         return productsRepository.findAll(spec, PageRequest.of(page - 1, 5));
-    }
-
-    public List<Product> findAllBy() {
-        return productsRepository.findAllBy();
     }
 
     public Optional<Product> findById(Long id) {
@@ -51,8 +54,11 @@ public class ProductsService {
         }
     }
 
-    public Product save(Product product) {
-        return productsRepository.save(product);
+    @Transactional
+    public ProductDto save(ProductDto productDto) {
+        Product product = productConverter.dtoToEntity(productDto);
+        Product persistProduct = productsRepository.save(product);
+        return productConverter.entityToDto(persistProduct);
     }
 
     @Transactional
@@ -62,14 +68,17 @@ public class ProductsService {
     }
 
     @Transactional
-    public Product update(ProductDto productDto) {
-        Product product = productsRepository.findById(productDto.getId()).orElseThrow(() -> new ResourceNotFoundException("Невозможно обновить  продукт, не найден в базе, id: " + productDto.getId()));
-        if (productDto.getTitle() != null) {
-            product.setTitle(productDto.getTitle());
+    public void updateProductFromDto(ProductDto productDto) {
+        Product product = findById(productDto.getId()).orElseThrow(() -> new ResourceNotFoundException("Невозможно обновить  продукт, не найден в базе, id: " + productDto.getId()));
+        product.setTitle(productDto.getTitle());
+        product.setPrice(productDto.getPrice());
+
+        if(!product.getCategory().getTitle().equals(productDto.getCategoryTitle())){
+            Category category = categoriesService.findByTitle(productDto.getCategoryTitle()).orElseThrow(()-> new ResourceNotFoundException("wrong category: " + productDto.getCategoryTitle()));
+            product.setCategory(category);
         }
-        if (productDto.getPrice() != null) {
-            product.setPrice(productDto.getPrice());
-        }
-        return product;
+        //return productsRepository.save(product);
     }
-}
+    // т.к. мы не хотим ничего возвращать, то save() не нужен. Нibernate при коммите транзакции автоматически
+    // бы заапдейтит объект.
+ }

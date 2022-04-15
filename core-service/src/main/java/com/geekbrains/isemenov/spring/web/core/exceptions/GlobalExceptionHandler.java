@@ -25,8 +25,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<FieldsValidationError> catchValidationException(ValidationException e) {
+    public ResponseEntity<AppError> catchValidationException(ValidationException e) {
         log.error(e.getMessage(), e);
-        return new ResponseEntity<>(new FieldsValidationError(e.getErrorFieldsMessages()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new AppError("BAD_REQUEST", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

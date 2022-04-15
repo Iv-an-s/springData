@@ -1,13 +1,13 @@
---create table categories(
---    id                  bigserial primary key,
---    title               varchar(50) not null,
---    created_at          timestamp default current_timestamp,
---    updated_at          timestamp default current_timestamp
---);
+create table categories(
+    id                  bigserial primary key,
+    title               varchar(50) not null,
+    created_at          timestamp default current_timestamp,
+    updated_at          timestamp default current_timestamp
+);
 
 create table if not exists products (
     id              bigserial primary key,
---   category_id     bigint not null references categories (id),
+    category_id     bigint not null references categories (id),
     title           varchar(255),
     price           numeric(8, 2) not null,
     created_at      timestamp default current_timestamp,
@@ -45,36 +45,37 @@ create table order_items (
 --    primary key (category_id, product_id)
 --);
 
---insert into categories (title) values
---    ('grocery'),
---    ('fruit'),
---    ('bakery_products'),
---    ('vegetables'),
---    ('dairy_products'),
---    ('fish'),
---    ('meat');
+insert into categories (title) values
+    ('grocery'),
+    ('fruit'),
+    ('bakery_products'),
+    ('vegetables'),
+    ('dairy_products'),
+    ('fish'),
+    ('meat'),
+    ('no_category');
 
-insert into products (title, price) values
-    ('Milk', 100.00),
-    ('bread', 10.00),
-    ('cheese', 30.00),
-    ('apple', 40.00),
-    ('fish', 50.00),
-    ('meat', 60.00),
-    ('butter', 70.00),
-    ('onion', 80.00),
-    ('garlic', 90.00),
-    ('potato', 100.00),
-    ('tomato', 110.00),
-    ('cucumber', 120.00),
-    ('honey', 130.00),
-    ('sugar', 140.00),
-    ('salt', 150.00),
-    ('oil', 160.00),
-    ('pepper', 170.00),
-    ('orange', 180.00),
-    ('banana', 190.00),
-    ('plum', 200.00);
+insert into products (title, price, category_id) values
+    ('Milk', 100.00, 5),
+    ('bread', 10.00, 3),
+    ('cheese', 30.00, 5),
+    ('apple', 40.00, 2),
+    ('fish', 50.00, 6),
+    ('meat', 60.00, 7),
+    ('butter', 70.00, 5),
+    ('onion', 80.00, 4),
+    ('garlic', 90.00, 4),
+    ('potato', 100.00, 4),
+    ('tomato', 110.00, 4),
+    ('cucumber', 120.00, 4),
+    ('honey', 130.00, 1),
+    ('sugar', 140.00, 1),
+    ('salt', 150.00, 1),
+    ('oil', 160.00, 1),
+    ('pepper', 170.00, 1),
+    ('orange', 180.00, 3),
+    ('banana', 190.00, 2),
+    ('plum', 200.00, 2);
 
 insert into orders (username, total_price, city, address, phone) values
 ('bob', 200.00, 'Moscow', 'Red Square 1', '+7(495)000-00-01');

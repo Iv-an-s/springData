@@ -2,6 +2,7 @@ package com.geekbrains.isemenov.spring.web.core.controllers;
 
 import com.geekbrains.isemenov.spring.web.api.exceptions.CartServiceAppError;
 import com.geekbrains.isemenov.spring.web.api.exceptions.ResourceNotFoundException;
+import com.geekbrains.isemenov.spring.web.core.services.CategoriesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,6 +26,7 @@ public class ProductsController {
     private final ProductsService productsService;
     private final ProductConverter productConverter;
     private final ProductValidator productValidator;
+    private final CategoriesService categoriesService;
 
     @Operation(
             summary = "Запрос на получение страницы продуктов",
@@ -40,12 +42,13 @@ public class ProductsController {
             @RequestParam(name = "p", defaultValue = "1") Integer page,
             @RequestParam(name = "min_price", required = false) Integer minPrice,
             @RequestParam(name = "max_price", required = false) Integer maxPrice,
-            @RequestParam(name = "title_part", required = false) String titlePart
+            @RequestParam(name = "title_part", required = false) String titlePart,
+            @RequestParam(name = "category_title_part", required = false) String categoryTitlePart
     ) {
         if (page < 1) {
             page = 1;
         }
-        return productsService.findAll(minPrice, maxPrice, titlePart, page).map(
+        return productsService.findAll(minPrice, maxPrice, titlePart, categoryTitlePart, page).map(
                 p -> productConverter.entityToDto(p));
     }
 
@@ -79,19 +82,14 @@ public class ProductsController {
 //    }
 
     @PostMapping
-    public ProductDto saveNewProduct(@RequestBody ProductDto productDto) {
+    public ProductDto save(@RequestBody ProductDto productDto) {
         productValidator.validate(productDto);
-        Product product = productConverter.dtoToEntity(productDto);
-        product.setId(null); //todo нужно ли обнулять?
-        productsService.save(product);
-        return productConverter.entityToDto(product);
+        return productsService.save(productDto);
     }
 
     @PutMapping
-    public ProductDto updateProduct(@RequestBody ProductDto productDto) {
-        productValidator.validate(productDto);
-        Product product = productsService.update(productDto);
-        return productConverter.entityToDto(product);
+    public void updateProduct(@RequestBody ProductDto productDto) {
+        productsService.updateProductFromDto(productDto);
     }
 
     @DeleteMapping("/{id}")

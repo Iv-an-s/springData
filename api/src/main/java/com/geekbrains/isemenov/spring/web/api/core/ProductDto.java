@@ -15,10 +15,14 @@ public class ProductDto {
     @Schema(description = "Цена продукта", required = true, example = "120")
     private BigDecimal price;
 
-    public ProductDto(Long id, String title, BigDecimal price) {
+    @Schema(description = "Название категории продукта", required = false)
+    private String categoryTitle;
+
+     public ProductDto(Long id, String title, BigDecimal price, String categoryTitle) {
         this.id = id;
         this.title = title;
         this.price = price;
+        this.categoryTitle = categoryTitle;
     }
 
     public ProductDto() {
@@ -46,5 +50,13 @@ public class ProductDto {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getCategoryTitle() {
+        return categoryTitle;
+    }
+
+    public void setCategoryTitle(String categoryTitle) {
+        this.categoryTitle = categoryTitle;
     }
 }
