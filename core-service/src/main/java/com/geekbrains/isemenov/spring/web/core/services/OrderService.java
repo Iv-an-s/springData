@@ -10,6 +10,9 @@ import com.geekbrains.isemenov.spring.web.core.converters.OrderItemConverter;
 import com.geekbrains.isemenov.spring.web.core.entities.Order;
 import com.geekbrains.isemenov.spring.web.core.entities.OrderItem;
 import com.geekbrains.isemenov.spring.web.core.integrations.CartServiceIntegration;
+import com.geekbrains.isemenov.spring.web.core.listener.Event;
+import com.geekbrains.isemenov.spring.web.core.listener.OrderListener;
+import com.geekbrains.isemenov.spring.web.core.listener.Subject;
 import com.geekbrains.isemenov.spring.web.core.repositories.OrdersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,7 @@ public class OrderService {
     private final OrdersRepository ordersRepository;
     private final ProductsService productsService;
     private final OrderItemConverter orderItemConverter;
+    private final Subject subject;
 
     private List<OrderItemDto> productMonthCounter = new ArrayList<>();
 
@@ -71,7 +75,11 @@ public class OrderService {
     }
 
     public void save(Order order){
-        ordersRepository.save(order);
+        Order savedOrder = ordersRepository.save(order);
+        if(subject.isListenerEmpty()){
+            subject.registerListener(new OrderListener());
+        }
+        subject.publishEvent(new Event("Order #" + savedOrder.getId() + " created"));
     }
 
     public List<Order> findOrdersByUsername(String username) {
