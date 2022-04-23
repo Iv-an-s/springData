@@ -2,6 +2,7 @@ package com.geekbrains.isemenov.spring.web.core.services;
 
 import com.geekbrains.isemenov.spring.web.api.core.ProductDto;
 import com.geekbrains.isemenov.spring.web.api.exceptions.ResourceNotFoundException;
+import com.geekbrains.isemenov.spring.web.core.IdentityMap;
 import com.geekbrains.isemenov.spring.web.core.converters.ProductConverter;
 import com.geekbrains.isemenov.spring.web.core.entities.Category;
 import com.geekbrains.isemenov.spring.web.core.entities.Product;
@@ -24,6 +25,7 @@ public class ProductsService {
     private final ProductsRepository productsRepository;
     private final ProductConverter productConverter;
     private final CategoriesService categoriesService;
+    private final IdentityMap identityMap;
 
     public Page<Product> findAll(Integer minPrice, Integer maxPrice, String titlePart, String categoryTitlePart, Integer page) {
         Specification<Product> spec = Specification.where(null);
@@ -43,7 +45,8 @@ public class ProductsService {
     }
 
     public Optional<Product> findById(Long id) {
-        return productsRepository.findById(id);
+        return Optional.ofNullable(identityMap.getProduct(id));
+        //return productsRepository.findById(id);
     }
 
     public void deleteById(Long id) {
